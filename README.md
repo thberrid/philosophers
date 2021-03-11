@@ -24,6 +24,8 @@ int usleep(useconds_t usec);
 
 	usleep - suspend execution for microsecond intervals
 
+	10 000 000 = 10
+
 	return: 0 | -1 + errno
 	parameter:
 		useconds_t > unsigned int

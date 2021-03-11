@@ -48,9 +48,9 @@ int			get_args(int ac, char **av, t_args *args)
 	if (args_digitsonly(ac, av))
 		return (1);
 	args->p_len = ft_atoi(av[1]);
-	args->ttdie = ft_atoi(av[2]);
-	args->tteat = ft_atoi(av[3]);
-	args->ttsleep = ft_atoi(av[4]);
+	args->ttdie = ft_atoi(av[2]) * 1000;
+	args->tteat = ft_atoi(av[3]) * 1000;
+	args->ttsleep = ft_atoi(av[4]) * 1000;
 	args->meals_len = -1;
 	if (ac > P_ARG_MINLEN)
 		args->meals_len = ft_atoi(av[5]);

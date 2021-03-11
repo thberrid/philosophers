@@ -16,19 +16,21 @@ NAME	= philo_one
 
 NAME_S	= 	main.c \
 			args_ctr.c \
-			args_utils.c
+			args_utils.c \
+			philo_init.c
 NAME_O	= $(NAME_S:.c=.o)
 
-FLAGS_CC	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror
+#-g3 -fsanitize=address
 
 .PHONY: all
 all : $(NAME)
 
 $(NAME) : $(NAME_O)
-	$(CC) -I . $(NAME_O) -o $(NAME)
+	$(CC) $(CFLAGS) -pthread -I . $(NAME_O) -o $(NAME)
 
 %.o: %.c $(FILES_H)
-	$(CC) -I . -L -pthread -c -o $@ $<
+	$(CC) $(CFLAGS) -I . -c -o $@ $<
 
 .PHONY : clean
 clean :

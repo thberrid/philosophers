@@ -11,36 +11,32 @@
 /* ************************************************************************** */
 
 #include <philo_one.h>
-#include <stdio.h>
 
-/*
-int	p_sleep(void)
-{
-	usleep();
-}
 
-int	philo(void)
-{
-	while (1)
-	{
-		p_eat();
-		p_sleep();
-		p_think();
-	}
-	return (0);
-}
-*/
+
 
 int main(int ac, char **av)
 {
-	struct timeval 	tv;
 	t_args			args;
+	t_philo			*philos;
+	pthread_t		philo;
+	pthread_mutex_t frk_right;
 
 	if (get_args(ac, av, &args))
 		return (usage_write());
-	printf("%d\n", args.meals_len);
-	gettimeofday(&tv, NULL);
-	printf("%lu\n", tv.tv_sec);
-	printf("lol\n");
+	if (philos_alloc(&philos, &args))
+		return (write(1, "init alloc error\n", 17));
 	return (0);
+/*
+	if (pthread_mutex_init(&frk_right, NULL))
+		return (write(1, "mtx init error\n", 15));
+	usleep(10000000);
+	pthread_create(&philo, NULL, routine, &data);
+//	gett_imeofday(&tv, NULL);
+	write(1, "OK\n", 3);
+	pthread_mutex_destroy(&frk_right);
+//	pthread_join(philo, NULL);
+	usleep(10000);
+//	pthread_detach(philo);
+*/
 }
