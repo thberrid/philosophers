@@ -14,7 +14,9 @@ HELL	= /bin/sh
 
 NAME	= philo_one
 
-NAME_S	= main.c
+NAME_S	= 	main.c \
+			args_ctr.c \
+			args_utils.c
 NAME_O	= $(NAME_S:.c=.o)
 
 FLAGS_CC	= -Wall -Wextra -Werror
