@@ -36,11 +36,11 @@ void    ft_putnbr(long n)
 t_states_desc	*get_statesdesc(void)
 {
 	static t_states_desc states_desc[5] = {
-		{" is eating\n", 11},
-		{" is sleeping\n", 13},
-		{" is thinking\n", 13},
-		{" is dead\n", 9},
-		{NULL, 0}
+		{ " is eating\n", 11 },
+		{ " is sleeping\n", 13 },
+		{ " is thinking\n", 13 },
+		{ " is dead\n", 9 },
+		{ NULL, 0 }
 	};
 	return (states_desc);
 }

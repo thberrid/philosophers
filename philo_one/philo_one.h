@@ -59,18 +59,23 @@ typedef struct	s_action
 	struct timeval 	last_change;
 }				t_action;
 
-typedef struct	s_philo
+typedef struct	s_meals
 {
-	t_action		state;
-	int				id;
-	struct timeval 	birth;
-	pthread_t 		thread;
-	pthread_mutex_t fork;
-	int	tt_die;
-	int	tt_eat;
-	int	tt_sleep;
+	struct timeval 	last;
 	int	nb_meals;
 	int	max_meals;
+}				t_meals;
+
+typedef struct	s_philo
+{
+	int				id;
+	int				tt_die;
+	int				tt_eat;
+	int				tt_sleep;
+	t_action		state;
+	t_meals			meals;
+	pthread_t 		thread;
+	pthread_mutex_t fork;
 	struct s_philo	*neighboor;
 }				t_philo;
 
