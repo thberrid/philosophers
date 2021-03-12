@@ -62,8 +62,8 @@ typedef struct	s_action
 typedef struct	s_meals
 {
 	struct timeval 	last;
-	int	nb_meals;
-	int	max_meals;
+	int	count;
+	int	max;
 }				t_meals;
 
 typedef struct	s_philo

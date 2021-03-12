@@ -25,7 +25,7 @@ static int		philo_set(t_philo *philos, t_args *args, int index, int max)
 
 	this_philo = &(philos[index]);
 	this_philo->id = index + 1;
-	if (gettimeofday(&(this_philo->birth), NULL))
+	if (gettimeofday(&(this_philo->meals.last), NULL))
 		return (1);
 	if (gettimeofday(&((this_philo->state).last_change), NULL))
 		return (1);
@@ -34,8 +34,8 @@ static int		philo_set(t_philo *philos, t_args *args, int index, int max)
 	this_philo->tt_die = args->tt_die;
 	this_philo->tt_eat = args->tt_eat;
 	this_philo->tt_sleep = args->tt_sleep;
-	this_philo->nb_meals = 0;
-	this_philo->max_meals = args->max_meals;
+	this_philo->meals.count = 0;
+	this_philo->meals.max = args->max_meals;
 	this_philo->neighboor = philo_find_neighboor(philos, index, max);
 	if (pthread_mutex_init(&(this_philo->fork), NULL))
 		return (1);

@@ -16,8 +16,9 @@ static int	philo_eats(t_philo *self)
 {
 	self->state.old = self->state.current;
 	self->state.current = is_eating;
-	self->nb_meals += 1;
+	self->meals.count += 1;
 	gettimeofday(&self->state.last_change, NULL);
+	gettimeofday(&self->meals.last, NULL);
 	usleep(self->tt_eat);
 	pthread_mutex_unlock(&(self->neighboor->fork));
 	pthread_mutex_unlock(&(self->fork));
@@ -50,7 +51,7 @@ void	*routine(void *data)
 	philo = (t_philo *)data;
 	while (1)
 	{
-		if (philo->max_meals >= 0 && philo->nb_meals < philo->max_meals)
+		if (philo->meals.max >= 0 && philo->meals.count < philo->meals.max)
 			philo_thinks(philo);
 		else
 			return (philo);

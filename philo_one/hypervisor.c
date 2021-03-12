@@ -24,7 +24,7 @@ void	hypervision(t_philo *philo, int philo_len)
 	states_desc = get_statesdesc();
 	while (philo)
 	{
-		if (philo->nb_meals == philo->max_meals)
+		if (philo->meals.count == philo->meals.max)
 			goaled += 1;
 		if (philo->state.old != philo->state.current)
 		{
