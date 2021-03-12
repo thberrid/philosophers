@@ -48,11 +48,11 @@ int			get_args(int ac, char **av, t_args *args)
 	if (args_digitsonly(ac, av))
 		return (1);
 	args->p_len = ft_atoi(av[1]);
-	args->ttdie = ft_atoi(av[2]) * 1000;
-	args->tteat = ft_atoi(av[3]) * 1000;
-	args->ttsleep = ft_atoi(av[4]) * 1000;
-	args->meals_len = -1;
+	args->tt_die = ft_atoi(av[2]) * 1000;
+	args->tt_eat = ft_atoi(av[3]) * 1000;
+	args->tt_sleep = ft_atoi(av[4]) * 1000;
+	args->max_meals = -1;
 	if (ac > P_ARG_MINLEN)
-		args->meals_len = ft_atoi(av[5]);
+		args->max_meals = ft_atoi(av[5]);
 	return (0);
 }

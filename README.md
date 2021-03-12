@@ -18,6 +18,8 @@ struct timeval {
 	suseconds_t tv_usec;    /* microseconds */
 };
 
+time_t 		> long
+suseconds_t > long
 ---
 int usleep(useconds_t usec);
 	#include <unistd.h>

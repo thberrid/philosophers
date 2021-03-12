@@ -12,41 +12,50 @@
 
 #include <philo_one.h>
 
-static int	philo_eats(int tt_eat, pthread_mutex_t *frk_right)
+static int	philo_eats(t_philo *self)
 {
-	write(1, "eating\n", 7);
-	usleep(tt_eat);
-	pthread_mutex_unlock(frk_right);
+	self->state.old = self->state.current;
+	self->state.current = is_eating;
+	self->nb_meals += 1;
+	gettimeofday(&self->state.last_change, NULL);
+	usleep(self->tt_eat);
+	pthread_mutex_unlock(&(self->neighboor->fork));
+	pthread_mutex_unlock(&(self->fork));
 	return (0);
 }
 
-static int	philo_sleeps(int tt_sleep)
+static int	philo_sleeps(t_philo *self)
 {
-	write(1, "sleeping\n", 9);
-	usleep(tt_sleep);
+	self->state.old = self->state.current;
+	self->state.current = is_sleeping;
+	gettimeofday(&self->state.last_change, NULL);
+	usleep(self->tt_sleep);
 	return (0);
 }
 
-static int	philo_thinks(t_args *args, pthread_mutex_t *frk_right)
+static int	philo_thinks(t_philo *self)
 {
-	int	ret;
-	write(1, "thinking\n", 9);
-	if ((ret = pthread_mutex_lock(frk_right)))
-		return (printf("mutex lock error %d\n", ret));
-	philo_eats(args->tt_eat, frk_right);
+	self->state.old = self->state.current;
+	self->state.current = is_thinking;
+	gettimeofday(&self->state.last_change, NULL);
+	pthread_mutex_lock(&(self->neighboor->fork));
+	pthread_mutex_lock(&(self->fork));
 	return (0);
 }
 
 void	*routine(void *data)
 {
-	t_data *this_data;
+	t_philo *philo;
 
-	this_data = (t_data *)data;
+	philo = (t_philo *)data;
 	while (1)
 	{
-		if (philo_thinks(this_data->args, this_data->frk_right))
-			return (data);
-		philo_sleeps(this_data->args->tt_sleep);
+		if (philo->max_meals >= 0 && philo->nb_meals < philo->max_meals)
+			philo_thinks(philo);
+		else
+			return (philo);
+		philo_eats(philo);
+		philo_sleeps(philo);
 	}
-	return (data);
+	return (philo);
 }
