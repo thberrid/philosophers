@@ -23,7 +23,7 @@ NAME_S	= 	main.c \
 			print.c
 NAME_O	= $(NAME_S:.c=.o)
 
-CFLAGS	= -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror -g3 # -fsanitize=address
 
 .PHONY: all
 all : $(NAME)

@@ -33,22 +33,31 @@ void    ft_putnbr(long n)
 	}
 }
 
-t_states_desc	*get_statesdesc(void)
+static t_states_desc	*get_statesdesc(void)
 {
 	static t_states_desc states_desc[5] = {
+		{ " is thinking\n", 13 },
 		{ " is eating\n", 11 },
 		{ " is sleeping\n", 13 },
-		{ " is thinking\n", 13 },
 		{ " is dead\n", 9 },
 		{ NULL, 0 }
 	};
 	return (states_desc);
 }
 
-void	print_state(t_philo *philo, t_states_desc *states)
+void	state_print(t_philo *philo)
 {
-	struct timeval tv;
+//	struct timeval	tv;
+//	char			str[64];
+	t_states_desc	*states_desc;
+	char			*state_desc;
+	unsigned long	state_time;
 
+	states_desc = get_statesdesc();
+	state_desc = states_desc[philo->state.state].desc;
+	state_time = (unsigned long)(get_msec(&(philo->state.last)) - get_msec(&(philo->birth)));
+	printf("%0lu %d %s\n", state_time, philo->id, state_desc);
+	/*
 	if (P_DEBUG)
 	{
 		gettimeofday(&tv, NULL);
@@ -59,4 +68,5 @@ void	print_state(t_philo *philo, t_states_desc *states)
 	write(1, " ", 1);
 	ft_putnbr(philo->id);
 	write(1, states->desc, states->len);
+	*/
 }

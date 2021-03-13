@@ -21,20 +21,17 @@ static t_philo	*philo_find_neighboor(t_philo *philos, int index, int max)
 
 static int		philo_set(t_philo *philos, t_args *args, int index, int max)
 {
-	t_philo		*this_philo;
+	t_philo			*this_philo;
 
 	this_philo = &(philos[index]);
 	this_philo->id = index + 1;
-	if (gettimeofday(&(this_philo->meals.last), NULL))
-		return (1);
-	if (gettimeofday(&((this_philo->state).last_change), NULL))
-		return (1);
-	this_philo->state.old = is_eating;
-	this_philo->state.current = is_thinking;
+	this_philo->state.table = args->table;
+	this_philo->state.table_mutex = args->table_mutex;
 	this_philo->tt_die = args->tt_die;
 	this_philo->tt_eat = args->tt_eat;
 	this_philo->tt_sleep = args->tt_sleep;
 	this_philo->meals.count = 0;
+	this_philo->state.state = is_thinking;
 	this_philo->meals.max = args->max_meals;
 	this_philo->neighboor = philo_find_neighboor(philos, index, max);
 	if (pthread_mutex_init(&(this_philo->fork), NULL))
@@ -44,9 +41,20 @@ static int		philo_set(t_philo *philos, t_args *args, int index, int max)
 
 int	philos_alloc(t_philo **philos, t_args *args)
 {
-	int		index;
-	int		max;
+	int				index;
+	int				max;
+	char			*table;
+	pthread_mutex_t	*table_mutex;
 
+	if (!(table = (char *)malloc(sizeof(char))))
+		return (1);
+	table[0] = OPEN;
+	args->table = table;
+	if (!(table_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t))))
+		return (1);
+	if (pthread_mutex_init(table_mutex, NULL))
+		return (1);
+	args->table_mutex = table_mutex;
 	max = args->p_len;
 	*philos = (t_philo *)malloc(sizeof(t_philo) * max);
 	if (!*philos)
