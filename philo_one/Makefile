@@ -14,24 +14,28 @@ HELL	= /bin/sh
 
 NAME	= philo_one
 
-NAME_S	= 	main.c \
+C_NAME	= 	main.c \
 			args_ctr.c \
 			args_utils.c \
 			hypervisor.c \
 			philo_init.c \
 			philo_actions.c \
 			print.c
-NAME_O	= $(NAME_S:.c=.o)
+
+OBJ_NAME  = $(C_NAME:.c=.o)
+OBJ_DIR	  = obj
+OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJ_NAME))
 
 CFLAGS	= -Wall -Wextra -Werror -g3 # -fsanitize=address
 
 .PHONY: all
 all : $(NAME)
 
-$(NAME) : $(NAME_O)
-	$(CC) $(CFLAGS) -pthread -I . $(NAME_O) -o $(NAME)
+$(NAME) : $(OBJ_FILES)
+	$(CC) $(CFLAGS) -pthread -I . $(OBJ_FILES) -o $(NAME)
 
-%.o: %.c $(FILES_H)
+$(OBJ_DIR)/%.o: %.c $(FILES_H)
+	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -I . -c -o $@ $<
 
 .PHONY: clean
