@@ -12,30 +12,17 @@
 
 #include <philo_one.h>
 
-void			ft_memcpy(void *dst, void *src, size_t len)
-{
-	unsigned int		index;
-	
-	index = 0;
-	while (index < len)
-	{
-		*((unsigned char *)dst + index) = *((unsigned char *)src + index);
-		index += 1;
-	}
-}
-
 int main(int ac, char **av)
 {
-	t_args			args;
+	t_roomdata		roomdata;
 	t_philo			*philos;
 
-	if (get_args(ac, av, &args))
-		return (usage_write());
-	if (philos_alloc(&philos, &args))
-		return (write(1, "init alloc error\n", 17));
-	launch_routines(philos, args.p_len);
-	hypervision(philos, &args);
-	kill_and_collect(philos, args.p_len);
-	clean(philos, &args);
+	if (data_set(ac, av, &roomdata, &philos))
+		return (0);
+	if (threads_launch(philos, &roomdata))
+		return (0);
+	threads_monitor(philos, &roomdata);
+	threads_gather(philos, roomdata.philos_len);
+	clean(philos, &roomdata);
 	return (0);
 }

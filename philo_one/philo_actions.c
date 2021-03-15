@@ -12,102 +12,108 @@
 
 #include <philo_one.h>
 
-void	table_close_local(t_philo *philo)
+void eats(t_philo *self)
 {
-	pthread_mutex_lock(philo->state.table_mutex);
-	philo->state.table[0] = CLOSED;
-	pthread_mutex_unlock(philo->state.table_mutex);
-}
-
-int	state_set(t_philo *self, enum e_states state)
-{
-	int		retrn;
-
-	retrn = 0;
-	pthread_mutex_lock(self->state.table_mutex);
-	if (self->state.table[0] == OPEN)
-	{	
-		self->state.state = state;
-		state_print(self);
-	}
-	else
-		retrn = 1;
-	if (state == is_dead)
-		table_close_local(self);
-	pthread_mutex_unlock(self->state.table_mutex);
-	return (retrn);
-}
-
-int	philo_dies(t_philo *self)
-{
-	gettimeofday(&self->state.last, NULL);
-	state_set(self, is_dead);
-	return (1);
-}
-
-static int	philo_eats(t_philo *self)
-{
-	gettimeofday(&self->state.last, NULL);
-	if (state_set(self, is_eating))
-		return (1);
-	self->meals.count += 1;
-	gettimeofday(&self->meals.last, NULL);
-	usleep(self->tt_eat);
+	usleep(self->roomdata->tt_eat * 1000);
 	pthread_mutex_unlock(&(self->neighboor->fork));
 	pthread_mutex_unlock(&(self->fork));
-	return (0);
 }
 
-static int	philo_sleeps(t_philo *self)
+void sleeps(t_philo *self)
 {
-	gettimeofday(&self->state.last, NULL);
-	if (state_set(self, is_sleeping))
-		return (1);
-	usleep(self->tt_sleep);
-	return (0);
+	usleep(self->roomdata->tt_sleep * 1000);
 }
 
-static int	philo_thinks(t_philo *self)
+void takes_leftfork(t_philo *self)
 {
-	gettimeofday(&self->state.last, NULL);
-	if (state_set(self, is_thinking))
-		return (1);
-	pthread_mutex_lock(&(self->neighboor->fork));
-	if (state_set(self, took_fork))
-		return (1);
 	pthread_mutex_lock(&(self->fork));
-	if (state_set(self, took_fork))
+}
+
+void takes_rightfork(t_philo *self)
+{
+	pthread_mutex_lock(&(self->neighboor->fork));
+}
+
+void	thinks(t_philo *self)
+{
+	(void)self;
+	return ;
+}
+
+void	update_time(t_philo *self)
+{
+	gettimeofday(&self->state.time, NULL);
+}
+
+void	update_mealdata(t_philo *self)
+{
+	gettimeofday(&self->state.time, NULL);
+	gettimeofday(&self->meals.time, NULL);
+	self->meals.count += 1;
+}
+
+t_todolist	*get_todolist()
+{
+	static t_todolist todolist[6] = {
+		{ &update_time, &takes_leftfork, has_taken_a_fork },
+		{ &update_time, &takes_rightfork, has_taken_a_fork },
+		{ &update_mealdata, &eats, is_eating },
+		{ &update_time, &sleeps, is_sleeping },
+		{ &update_time, &thinks, is_thinking },
+		{ NULL, NULL, died }
+	};
+	return (todolist);
+}
+
+int		is_dead(t_philo *self)
+{
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	if (tv_to_ms(&now) - tv_to_ms(&self->meals.time) >= self->roomdata->tt_die)
 		return (1);
 	return (0);
 }
 
-t_state_list	*get_statelist()
+int		should_i_go(t_philo *self)
 {
-	static t_state_list statelist[4] = {
-		{ &philo_thinks },
-		{ &philo_eats },
-		{ &philo_sleeps },
-		{ NULL }
-	};
-	return (statelist);
+	if (self->roomdata->table.state == CLOSED)
+	{
+		pthread_mutex_unlock(&self->roomdata->printer);
+		return (1);
+	}
+	if (is_dead(self))
+	{
+		gettimeofday(&self->state.time, NULL);
+		self->state.id = died;
+		state_print(self);
+		self->roomdata->table.state = CLOSED;
+		pthread_mutex_unlock(&self->roomdata->printer);
+		return (1);
+	}
+	return (0);
 }
 
 void	*routine(void *data)
 {
 	int				index;
-	int				retrn;
 	t_philo 		*philo;
-	t_state_list	*states;
+	t_todolist		*todo;
 
-	states = get_statelist();
+	todo = get_todolist();
 	philo = (t_philo *)data;
 	index = 0;
-	retrn = 0;
-	while (!retrn)
+	while (1)
 	{
-		retrn = states[index].f(philo);
-		index += 1;
-		if (!states[index].f)
+		pthread_mutex_lock(&philo->roomdata->printer);
+		if (should_i_go(philo))
+			return (philo);
+		todo[index].before(philo);
+		philo->state.id = todo[index].state;
+		state_print(philo);
+		pthread_mutex_unlock(&philo->roomdata->printer);
+		todo[index].task(philo);
+		if (!todo[index].task)
 			index = 0;
 	}
 	return (philo);

@@ -26,7 +26,7 @@ int usleep(useconds_t usec);
 
 	usleep - suspend execution for microsecond intervals
 
-	10 000 000 = 10
+	1 ms = 10^3 us
 
 	return: 0 | -1 + errno
 	parameter:

@@ -17,8 +17,9 @@ NAME	= philo_one
 C_NAME	= 	main.c \
 			args_ctr.c \
 			args_utils.c \
+			data_set.c \
+			clean.c \
 			hypervisor.c \
-			philo_init.c \
 			philo_actions.c \
 			print.c
 
@@ -40,7 +41,7 @@ $(OBJ_DIR)/%.o: %.c $(FILES_H)
 
 .PHONY: clean
 clean :
-	rm -f $(NAME_O)
+	rm -f $(OBJ_FILES)
 
 .PHONY: fclean
 fclean: clean

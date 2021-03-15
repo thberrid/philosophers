@@ -12,20 +12,14 @@
 
 #include <philo_one.h>
 
-int	usage_write(void)
-{
-	write(1, P_USAGE, P_USAGE_LEN);
-	return (0);
-}
-
-int		ft_isdigit(int c)
+static int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
 	return (0);
 }
 
-int		ft_isspace(int c)
+static int	ft_isspace(int c)
 {
 	if ((c >= 9 && c <= 13) || c == 32)
 		return (1);

@@ -19,6 +19,13 @@ static int	args_len(int ac)
 	return (0); 
 }
 
+static int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
+
 static int	args_digitsonly(int ac, char **av)
 {
 	int		index;
@@ -39,20 +46,18 @@ static int	args_digitsonly(int ac, char **av)
 	return (0);
 }
 
-int			get_args(int ac, char **av, t_args *args)
+int			args_get(int ac, char **av, t_roomdata *roomdata)
 {
-	(void)ac;
-	(void)av;
 	if (args_len(ac))
 		return (1);
 	if (args_digitsonly(ac, av))
 		return (1);
-	args->p_len = ft_atoi(av[1]);
-	args->tt_die = ft_atoi(av[2]) * 1000;
-	args->tt_eat = ft_atoi(av[3]) * 1000;
-	args->tt_sleep = ft_atoi(av[4]) * 1000;
-	args->max_meals = -1;
+	roomdata->philos_len = ft_atoi(av[1]);
+	roomdata->tt_die = ft_atoi(av[2]);
+	roomdata->tt_eat = ft_atoi(av[3]);
+	roomdata->tt_sleep = ft_atoi(av[4]);
+	roomdata->max_meals = -1;
 	if (ac > P_ARG_MINLEN)
-		args->max_meals = ft_atoi(av[5]);
+		roomdata->max_meals = ft_atoi(av[5]);
 	return (0);
 }

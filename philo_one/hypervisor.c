@@ -12,44 +12,28 @@
 
 #include <philo_one.h>
 
-
-void	table_close(t_args *args)
-{
-	pthread_mutex_lock(args->table_mutex);
-	args->table[0] = CLOSED;
-	pthread_mutex_unlock(args->table_mutex);
-}
-
-int		is_table_closed(t_args *args)
-{
-	int		retrn;
-
-	retrn = OPEN;
-	pthread_mutex_lock(args->table_mutex);
-	retrn = args->table[0];
-	pthread_mutex_unlock(args->table_mutex);
-	return (retrn);
-}
-
-void	hypervision(t_philo *philo, t_args *args)
+void	threads_monitor(t_philo *philo, t_roomdata *roomdata)
 {
 	int				goaled;
-//	struct timeval	now;
 	t_philo			*first;
-	int 			philo_len;
 
 	first = philo;
 	goaled = 0;
-	philo_len = args->p_len;
 	while (philo)
 	{
-		if (is_table_closed(args) == CLOSED)
+		if (roomdata->table.state == CLOSED)
 			return ;
-		if (philo->meals.max > 0 && philo->meals.count >= philo->meals.max)
-			goaled += 1;
-		if (goaled == philo_len)
+		if (is_dead(philo))
 		{
-			table_close(args);
+			roomdata->table.state = CLOSED;
+			return ;
+		}
+		if (roomdata->max_meals > 0 
+			&& philo->meals.count >= roomdata->max_meals)
+			goaled += 1;
+		if (goaled == roomdata->philos_len)
+		{
+			roomdata->table.state = CLOSED;
 			return ;
 		}
 		philo = philo->neighboor;
@@ -58,53 +42,36 @@ void	hypervision(t_philo *philo, t_args *args)
 	}
 }
 
-void	launch_routines(t_philo	*philos, int max)
+static void	birth_set(struct timeval *birth, t_philo *this)
+{
+	this->birth.tv_sec = birth->tv_sec;
+	this->birth.tv_usec = birth->tv_usec;
+	this->meals.time.tv_sec = birth->tv_sec;
+	this->meals.time.tv_usec = birth->tv_usec;
+}
+
+int		threads_launch(t_philo	*philos, t_roomdata *roomdata)
 {
 	int				index;
 	struct timeval	birth;
+	int				max;
 
-	settimeofday(&birth, NULL);
+	gettimeofday(&birth, NULL);
 	index = 0;
+	max = roomdata->philos_len;
 	while (index < max)
 	{
-		ft_memcpy(&(philos[index].birth), &birth, sizeof(struct timeval));
-		ft_memcpy(&(philos[index].meals.last), &birth, sizeof(struct timeval));
-		pthread_create(&(philos[index].thread), NULL, &routine, &philos[index]);
-//		pthread_detach(philos[index].thread);
+		birth_set(&birth, &philos[index]);
+		if (pthread_create(&(philos[index].thread), NULL, &routine, &philos[index]))
+		{
+			roomdata->table.state = CLOSED;
+			threads_gather(philos, index);
+			forksmutex_destroy(philos, max);
+			roomdatamutex_destroy(roomdata);
+			free(philos);
+			return (1);
+		}
 		index += 1;
 	}
-}
-
-void	kill_and_collect(t_philo *philos, int max)
-{
-	int		index;
-	t_philo	this;
-
-	index = 0;
-	while (index < max)
-	{
-		this = philos[index];
-		pthread_join(this.thread, NULL);
-		index += 1;
-	}
-}
-
-void	clean(t_philo *philos, t_args *args)
-{
-	int		index;
-	t_philo	this;
-	int		max;
-
-	index = 0;
-	free(args->table);
-	pthread_mutex_destroy(args->table_mutex);
-	free(args->table_mutex);
-	max = args->p_len;
-	while (index < max)
-	{
-		this = philos[index];
-		pthread_mutex_destroy(&(this.fork));
-		index += 1;
-	}
-	free(philos);
+	return (0);
 }
