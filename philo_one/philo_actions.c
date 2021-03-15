@@ -15,8 +15,8 @@
 void eats(t_philo *self)
 {
 	usleep(self->roomdata->tt_eat * 1000);
-	pthread_mutex_unlock(&(self->neighboor->fork));
-	pthread_mutex_unlock(&(self->fork));
+	pthread_mutex_unlock(&self->neighboor->fork);
+	pthread_mutex_unlock(&self->fork);
 }
 
 void sleeps(t_philo *self)
@@ -110,9 +110,9 @@ void	*routine(void *data)
 			return (philo);
 		todo[index].before(philo);
 		philo->state.id = todo[index].state;
+		todo[index].task(philo);
 		state_print(philo);
 		pthread_mutex_unlock(&philo->roomdata->printer);
-		todo[index].task(philo);
 		if (!todo[index].task)
 			index = 0;
 	}
