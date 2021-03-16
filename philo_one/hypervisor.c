@@ -21,13 +21,16 @@ void	threads_monitor(t_philo *philo, t_roomdata *roomdata)
 	goaled = 0;
 	while (philo)
 	{
+		
 		if (roomdata->table.state == CLOSED)
 			return ;
+		/*
 		if (is_dead(philo))
 		{
 			roomdata->table.state = CLOSED;
+			dies(philo);
 			return ;
-		}
+		}*/
 		if (roomdata->max_meals > 0 
 			&& philo->meals.count >= roomdata->max_meals)
 			goaled += 1;
@@ -59,6 +62,7 @@ int		threads_launch(t_philo	*philos, t_roomdata *roomdata)
 	gettimeofday(&birth, NULL);
 	index = 0;
 	max = roomdata->philos_len;
+	roomdata->table.state = OPEN;
 	while (index < max)
 	{
 		birth_set(&birth, &philos[index]);

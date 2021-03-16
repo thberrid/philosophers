@@ -24,43 +24,55 @@ void sleeps(t_philo *self)
 	usleep(self->roomdata->tt_sleep * 1000);
 }
 
-void takes_leftfork(t_philo *self)
-{
-	pthread_mutex_lock(&(self->fork));
-}
-
 void takes_rightfork(t_philo *self)
 {
 	pthread_mutex_lock(&(self->neighboor->fork));
 }
 
+void takes_leftfork(t_philo *self)
+{
+	pthread_mutex_lock(&(self->fork));
+}
+
 void	thinks(t_philo *self)
 {
+	state_print(self);
+}
+
+void	nothing(t_philo *self)
+{
 	(void)self;
-	return ;
+}
+
+void	dies(t_philo *self)
+{
+	gettimeofday(&self->state.time, NULL);
+	self->state.id = died;
+	state_print(self);
 }
 
 void	update_time(t_philo *self)
 {
 	gettimeofday(&self->state.time, NULL);
+	state_print(self);
 }
 
 void	update_mealdata(t_philo *self)
 {
-	gettimeofday(&self->state.time, NULL);
-	gettimeofday(&self->meals.time, NULL);
 	self->meals.count += 1;
+	gettimeofday(&self->meals.time, NULL);
+	update_time(self);
 }
 
 t_todolist	*get_todolist()
 {
 	static t_todolist todolist[6] = {
-		{ &update_time, &takes_leftfork, has_taken_a_fork },
-		{ &update_time, &takes_rightfork, has_taken_a_fork },
-		{ &update_mealdata, &eats, is_eating },
-		{ &update_time, &sleeps, is_sleeping },
-		{ &update_time, &thinks, is_thinking },
-		{ NULL, NULL, died }
+		{ &nothing, &takes_leftfork, &update_time, has_taken_a_fork },
+		{ &nothing, &takes_rightfork, &update_time, has_taken_a_fork },
+		{ &update_mealdata, &eats, &nothing, is_eating },
+		{ &update_time, &sleeps, &nothing, is_sleeping },
+		{ &update_time, &thinks, &nothing, is_thinking },
+		{ NULL, NULL, NULL, died }
 	};
 	return (todolist);
 }
@@ -79,16 +91,14 @@ int		should_i_go(t_philo *self)
 {
 	if (self->roomdata->table.state == CLOSED)
 	{
-		pthread_mutex_unlock(&self->roomdata->printer);
+//		pthread_mutex_unlock(&self->roomdata->printer);
 		return (1);
 	}
 	if (is_dead(self))
 	{
-		gettimeofday(&self->state.time, NULL);
-		self->state.id = died;
-		state_print(self);
 		self->roomdata->table.state = CLOSED;
-		pthread_mutex_unlock(&self->roomdata->printer);
+		dies(self);
+//		pthread_mutex_unlock(&self->roomdata->printer);
 		return (1);
 	}
 	return (0);
@@ -103,16 +113,17 @@ void	*routine(void *data)
 	todo = get_todolist();
 	philo = (t_philo *)data;
 	index = 0;
+	if (philo->id % 2)
+		usleep(25);
 	while (1)
 	{
-		pthread_mutex_lock(&philo->roomdata->printer);
 		if (should_i_go(philo))
 			return (philo);
-		todo[index].before(philo);
 		philo->state.id = todo[index].state;
+		todo[index].pre_task(philo);
 		todo[index].task(philo);
-		state_print(philo);
-		pthread_mutex_unlock(&philo->roomdata->printer);
+		todo[index].post_task(philo);
+		index += 1;
 		if (!todo[index].task)
 			index = 0;
 	}

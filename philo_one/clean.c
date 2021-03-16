@@ -36,6 +36,7 @@ void	threads_gather(t_philo *philos, int max)
 	int		index;
 
 	index = 0;
+//	forksmutex_destroy(philos, philos->roomdata->philos_len);
 	while (index < max)
 	{
 		pthread_join(philos[index].thread, NULL);
