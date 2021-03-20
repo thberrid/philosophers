@@ -12,7 +12,7 @@
 
 #include <philo_one.h>
 
-void ft_sleep(long tt)
+int ft_sleep(long tt)
 {
 	struct timeval	tv;
 	long			start;
@@ -27,60 +27,82 @@ void ft_sleep(long tt)
 		gettimeofday(&tv, NULL);
 		now = tv_to_ms(&tv);
 	}
+	return (0);
 }
 
-void eats(t_philo *self)
+int eats(t_philo *self)
 {
 //	usleep(self->roomdata->tt_eat * 1000);
 	ft_sleep(self->roomdata->tt_eat);
 	pthread_mutex_unlock(&self->neighboor->fork);
 	pthread_mutex_unlock(&self->fork);
+	return (0);
 }
 
-void sleeps(t_philo *self)
+int sleeps(t_philo *self)
 {
 //	usleep(self->roomdata->tt_sleep * 1000);
 	ft_sleep(self->roomdata->tt_sleep);
+	return (0);
 }
 
-void takes_rightfork(t_philo *self)
+int takes_rightfork(t_philo *self)
 {
-	pthread_mutex_lock(&(self->neighboor->fork));
+//	if (self->roomdata->table.state == OPEN)
+		pthread_mutex_lock(&(self->neighboor->fork));
+	return (0);	
 }
 
-void takes_leftfork(t_philo *self)
+int takes_leftfork(t_philo *self)
 {
-	pthread_mutex_lock(&(self->fork));
+//	if (self->roomdata->table.state == OPEN)
+		pthread_mutex_lock(&(self->fork));
+	return (0);
 }
 
-void	thinks(t_philo *self)
+int		thinks(t_philo *self)
 {
 	(void)self;
+	return (0);
 }
 
-void	nothing(t_philo *self)
+int		nothing(t_philo *self)
 {
 	(void)self;
+	return (0);
 }
 
-void	dies(t_philo *self)
-{
-	gettimeofday(&self->state.time, NULL);
-	self->state.id = died;
-	state_print(self);
-}
-
-void	update_time(t_philo *self)
+int		update_time(t_philo *self)
 {
 	gettimeofday(&self->state.time, NULL);
 	state_print(self);
+	return (0);
 }
 
-void	update_mealdata(t_philo *self)
+int		update_mealdata(t_philo *self)
 {
 	self->meals.count += 1;
 	gettimeofday(&self->meals.time, NULL);
 	update_time(self);
+	return (0);
+}
+
+int		dies(t_philo *self)
+{
+	gettimeofday(&self->state.time, NULL);
+	self->state.id = died;
+	state_print(self);
+	return (0);
+}
+
+int		is_dead(t_philo *self)
+{
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	if (tv_to_ms(&now) - tv_to_ms(&self->meals.time) >= self->roomdata->tt_die)
+		return (1);
+	return (0);
 }
 
 t_todolist	*get_todolist()
@@ -96,26 +118,20 @@ t_todolist	*get_todolist()
 	return (todolist);
 }
 
-int		is_dead(t_philo *self)
-{
-	struct timeval	now;
-
-	gettimeofday(&now, NULL);
-	if (tv_to_ms(&now) - tv_to_ms(&self->meals.time) >= self->roomdata->tt_die)
-		return (1);
-	return (0);
-}
-
 int		should_i_go(t_philo *self)
 {
 	if (self->roomdata->table.state == CLOSED)
 	{
+		pthread_mutex_unlock(&self->fork);
+		pthread_mutex_unlock(&self->neighboor->fork);
 //		pthread_mutex_unlock(&self->roomdata->printer);
 		return (1);
 	}
 	if (is_dead(self))
 	{
-		self->roomdata->table.state = CLOSED;
+//		self->roomdata->table.state = CLOSED;
+		pthread_mutex_unlock(&self->fork);
+		pthread_mutex_unlock(&self->neighboor->fork);
 		dies(self);
 //		pthread_mutex_unlock(&self->roomdata->printer);
 		return (1);
@@ -148,10 +164,17 @@ void	*routine(void *data)
 	{
 //		debug_print(philo);
 		if (should_i_go(philo))
-			return (philo);
+			break ;
 		philo->state.id = todo[index].state;
 		todo[index].pre_task(philo);
-		todo[index].task(philo);
+		if (philo->roomdata->table.state == OPEN)
+			todo[index].task(philo);
+		else
+	//	{
+	//		pthread_mutex_unlock(&philo->fork);
+	//		pthread_mutex_unlock(&philo->neighboor->fork);
+			break ;	
+	//	}
 		todo[index].post_task(philo);
 		index += 1;
 		if (!todo[index].task)

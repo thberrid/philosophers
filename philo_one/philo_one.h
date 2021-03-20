@@ -92,9 +92,9 @@ typedef struct	s_philo
 
 typedef struct s_todolist
 {
-	void			(*pre_task)(t_philo *);
-	void			(*task)(t_philo *);
-	void			(*post_task)(t_philo *);
+	int			(*pre_task)(t_philo *);
+	int			(*task)(t_philo *);
+	int			(*post_task)(t_philo *);
 	enum e_states 	state;
 }				t_todolist;
 
@@ -108,7 +108,7 @@ int				threads_launch(t_philo *philos, t_roomdata *roomdata);
 void			threads_monitor(t_philo *philo, t_roomdata *roomdata);
 
 int				is_dead(t_philo *philo);
-void			dies(t_philo *self);
+int				dies(t_philo *self);
 
 
 long			tv_to_ms(struct timeval *tv);

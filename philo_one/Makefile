@@ -27,7 +27,7 @@ OBJ_NAME  = $(C_NAME:.c=.o)
 OBJ_DIR	  = obj
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJ_NAME))
 
-CFLAGS	= -Wall -Wextra -Werror -g3 # -fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror -g3 #-fsanitize=address
 
 .PHONY: all
 all : $(NAME)

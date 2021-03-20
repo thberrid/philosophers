@@ -27,7 +27,6 @@ void	threads_monitor(t_philo *philo, t_roomdata *roomdata)
 		
 		if (is_dead(philo))
 		{
-			roomdata->table.state = CLOSED;
 			dies(philo);
 			return ;
 		}
@@ -65,6 +64,8 @@ int		threads_launch(t_philo	*philos, t_roomdata *roomdata)
 	roomdata->table.state = OPEN;
 	while (index < max)
 	{
+	//	if (philos[index].id % 2)
+//			usleep(50);
 		birth_set(&birth, &philos[index]);
 		if (pthread_create(&(philos[index].thread), NULL, &routine, &philos[index]))
 		{

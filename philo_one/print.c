@@ -52,12 +52,13 @@ void	state_print(t_philo *self)
 	t_states_desc	*states_desc;
 	char			*state_str;
 	long			state_time;
-	struct timeval	tvnow;
-	long			now;
+//	struct timeval	tvnow;
+//	long			now;
 
 	states_desc = get_statesdesc();
 	state_str = states_desc[self->state.id].str;
 	state_time = tv_to_ms(&self->state.time) - tv_to_ms(&self->birth);
+	/*
 	if (DEBUG)
 	{
 		gettimeofday(&tvnow, NULL);
@@ -65,5 +66,9 @@ void	state_print(t_philo *self)
 		printf("%6ld [%6ld] %d %s\n", state_time, now, self->id, state_str);
 	}
 	else
+	*/
+	if (self->roomdata->table.state == OPEN)
 		printf("%6ld %d %s\n", state_time, self->id, state_str);
+	if (self->state.id == died)
+		self->roomdata->table.state = CLOSED;
 }
