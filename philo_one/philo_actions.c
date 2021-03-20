@@ -36,7 +36,7 @@ void takes_leftfork(t_philo *self)
 
 void	thinks(t_philo *self)
 {
-	state_print(self);
+	(void)self;
 }
 
 void	nothing(t_philo *self)
