@@ -12,16 +12,35 @@
 
 #include <philo_one.h>
 
+void ft_sleep(long tt)
+{
+	struct timeval	tv;
+	long			start;
+	long			now;
+
+	gettimeofday(&tv, NULL);
+	start = tv_to_ms(&tv);
+	now = tv_to_ms(&tv);
+	while (now - start < tt)
+	{
+		usleep(25);
+		gettimeofday(&tv, NULL);
+		now = tv_to_ms(&tv);
+	}
+}
+
 void eats(t_philo *self)
 {
-	usleep(self->roomdata->tt_eat * 1000);
+//	usleep(self->roomdata->tt_eat * 1000);
+	ft_sleep(self->roomdata->tt_eat);
 	pthread_mutex_unlock(&self->neighboor->fork);
 	pthread_mutex_unlock(&self->fork);
 }
 
 void sleeps(t_philo *self)
 {
-	usleep(self->roomdata->tt_sleep * 1000);
+//	usleep(self->roomdata->tt_sleep * 1000);
+	ft_sleep(self->roomdata->tt_sleep);
 }
 
 void takes_rightfork(t_philo *self)
@@ -104,6 +123,16 @@ int		should_i_go(t_philo *self)
 	return (0);
 }
 
+void	debug_print(t_philo *self)
+{
+	struct timeval	tvnow;
+	long			now;
+
+gettimeofday(&tvnow, NULL);
+	now = tv_to_ms(&tvnow) - tv_to_ms(&self->birth);
+	printf("%6ld %d %s\n", now, self->id, "new turn !");
+}
+
 void	*routine(void *data)
 {
 	int				index;
@@ -113,10 +142,11 @@ void	*routine(void *data)
 	todo = get_todolist();
 	philo = (t_philo *)data;
 	index = 0;
-	if (philo->id % 2)
-		usleep(25);
+//	if (philo->id % 2)
+//		usleep(25);
 	while (1)
 	{
+//		debug_print(philo);
 		if (should_i_go(philo))
 			return (philo);
 		philo->state.id = todo[index].state;

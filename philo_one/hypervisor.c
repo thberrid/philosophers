@@ -24,13 +24,13 @@ void	threads_monitor(t_philo *philo, t_roomdata *roomdata)
 		
 		if (roomdata->table.state == CLOSED)
 			return ;
-		/*
+		
 		if (is_dead(philo))
 		{
 			roomdata->table.state = CLOSED;
 			dies(philo);
 			return ;
-		}*/
+		}
 		if (roomdata->max_meals > 0 
 			&& philo->meals.count >= roomdata->max_meals)
 			goaled += 1;

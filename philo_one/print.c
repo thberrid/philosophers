@@ -35,12 +35,13 @@ void    ft_putnbr(long n)
 
 static t_states_desc	*get_statesdesc(void)
 {
-	static t_states_desc states_desc[6] = {
+	static t_states_desc states_desc[7] = {
 		{ "is thinking", 13 },
 		{ "is eating", 11 },
 		{ "is sleeping", 13 },
 		{ "has taken a fork", 18 },
 		{ "died", 4 },
+		{ "new turn !", 4 },
 		{ NULL, 0 }
 	};
 	return (states_desc);

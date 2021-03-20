@@ -20,6 +20,7 @@ void		forksmutex_destroy(t_philo *philos, int len)
 	while (index < len)
 	{
 		pthread_mutex_destroy(&philos[index].fork);
+			printf("mutex destroyes\n");
 		index += 1;
 	}
 	return ;
@@ -36,10 +37,11 @@ void	threads_gather(t_philo *philos, int max)
 	int		index;
 
 	index = 0;
-//	forksmutex_destroy(philos, philos->roomdata->philos_len);
+	forksmutex_destroy(philos, philos->roomdata->philos_len);
 	while (index < max)
 	{
-		pthread_join(philos[index].thread, NULL);
+	//	pthread_join(philos[index].thread, NULL);
+		pthread_detach(philos[index].thread);
 		index += 1;
 	}
 }

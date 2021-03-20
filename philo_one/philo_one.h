@@ -27,7 +27,7 @@
 tt_sleep [nb_of_meals]\n"
 # define USAGE_LEN		56
 
-# define DEBUG			1
+# define DEBUG			0
 
 # define OPEN			1
 # define CLOSED			0
@@ -44,7 +44,8 @@ enum			e_states
 	is_eating,
 	is_sleeping,
 	has_taken_a_fork,
-	died
+	died,
+	debug
 };
 
 typedef struct	s_table

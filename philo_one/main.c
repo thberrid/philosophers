@@ -22,6 +22,7 @@ int main(int ac, char **av)
 	if (threads_launch(philos, &roomdata))
 		return (0);
 	threads_monitor(philos, &roomdata);
+//	usleep(20000000);
 	threads_gather(philos, roomdata.philos_len);
 	clean(philos, &roomdata);
 	return (0);
