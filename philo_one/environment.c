@@ -60,7 +60,9 @@ static int		roomdata_set(t_roomdata *roomdata)
 {
 	if (pthread_mutex_init(&roomdata->printer, NULL))
 		return (1);
-	roomdata->table = OPEN;
+	if (pthread_mutex_init(&roomdata->table.mutex, NULL))
+		return (1);
+	roomdata->table.state = OPEN;
 	roomdata->goaled = 0;
 	return (0);
 }

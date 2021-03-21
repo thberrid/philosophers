@@ -34,7 +34,7 @@ static int	is_dead(t_philo *self)
 
 int			is_this_the_end(t_philo *self)
 {
-	if (self->roomdata->table == CLOSED)
+	if (self->roomdata->table.state == CLOSED)
 		return (1);
 	if (is_dead(self))
 	{
@@ -54,7 +54,7 @@ static int	is_goal_achieved(t_philo *self)
 		roomdata->goaled += 1;
 	if (roomdata->goaled == roomdata->philos_len)
 	{
-		roomdata->table = CLOSED;
+		roomdata->table.state = CLOSED;
 		return (1);
 	}
 	return (0);
@@ -85,15 +85,13 @@ int			threads_launch(t_philo *philos, t_roomdata *roomdata)
 	gettimeofday(&roomdata->birth, NULL);
 	index = 0;
 	max = roomdata->philos_len;
-	roomdata->table = OPEN;
+	roomdata->table.state = OPEN;
 	while (index < max)
 	{
-		if (philos[index].id % 2)
-			usleep(50);
 		if (pthread_create(&(philos[index].thread),
 			NULL, &routine, &philos[index]))
 		{
-			roomdata->table = CLOSED;
+			roomdata->table.state = CLOSED;
 			threads_gather(philos, index);
 			forksmutex_destroy(philos, max);
 			clean(philos, roomdata);

@@ -22,7 +22,8 @@ static void			update_mealdata(t_philo *self)
 {
 	self->meals.count += 1;
 	gettimeofday(&self->meals.time, NULL);
-	update_time(self);
+	gettimeofday(&self->state.time, NULL);
+	state_print(self);
 }
 
 void				dies(t_philo *self)
@@ -34,9 +35,9 @@ void				dies(t_philo *self)
 
 static t_todolist	*get_todolist(void)
 {
-	static t_todolist todolist[6] = {
+	static t_todolist todolist[5] = {
 		{ &thinks, &takes_leftfork, &update_time, has_taken_a_fork },
-		{ &thinks, &takes_rightfork, &update_time, has_taken_a_fork },
+	//	{ &thinks, &takes_rightfork, &update_time, has_taken_a_fork },
 		{ &update_mealdata, &eats, &thinks, is_eating },
 		{ &update_time, &sleeps, &thinks, is_sleeping },
 		{ &update_time, &thinks, &thinks, is_thinking },
@@ -48,27 +49,27 @@ static t_todolist	*get_todolist(void)
 
 void				*routine(void *data)
 {
-	int				index;
+	int				current_state;
 	t_philo			*philo;
 	t_todolist		*todo;
 
 	todo = get_todolist();
 	philo = (t_philo *)data;
-	index = 0;
+	current_state = 0;
+	if (philo->id % 2)
+		usleep(1000);
 	while (1)
 	{
-		if (is_this_the_end(philo))
+		if (is_this_the_end(philo))//?????
 			break ;
-		philo->state.id = todo[index].state;
-		todo[index].pre_task(philo);
-		if (philo->roomdata->table == OPEN)
-			todo[index].task(philo);
-		else
-			break ;
-		todo[index].post_task(philo);
-		index += 1;
-		if (!todo[index].task)
-			index = 0;
+		philo->state.id = todo[current_state].state;
+		todo[current_state].pre_task(philo);
+		if (todo[current_state].task(philo))
+			continue ;
+		todo[current_state].post_task(philo);
+		current_state += 1;
+		if (!todo[current_state].task)
+			current_state = 0;
 	}
 	return (philo);
 }

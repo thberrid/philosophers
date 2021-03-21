@@ -30,6 +30,8 @@ void	threads_gather(t_philo *philos, int max)
 	int		index;
 
 	index = 0;
+	pthread_mutex_unlock(&philos->roomdata->printer);
+	pthread_mutex_unlock(&philos->roomdata->table.mutex);
 	while (index < max)
 	{
 		pthread_mutex_unlock(&philos[index].fork);
@@ -41,7 +43,7 @@ void	threads_gather(t_philo *philos, int max)
 
 void	clean(t_philo *philos, t_roomdata *roomdata)
 {
-	pthread_mutex_unlock(&roomdata->printer);
 	pthread_mutex_destroy(&roomdata->printer);
+	pthread_mutex_destroy(&roomdata->table.mutex);
 	free(philos);
 }

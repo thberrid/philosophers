@@ -33,11 +33,15 @@ void					state_print(t_philo *self)
 	char			*state_str;
 	long			state_time;
 
-	states_desc = get_statesdesc();
-	state_str = states_desc[self->state.id].str;
-	state_time = tv_to_ms(&self->state.time) - tv_to_ms(&self->roomdata->birth);
-	if (self->roomdata->table == OPEN)
-		printf("%14ld %d %s\n", state_time, self->id, state_str);
-	if (self->state.id == died)
-		self->roomdata->table = CLOSED;
+	pthread_mutex_lock(&(self->roomdata->printer));
+	if (self->roomdata->table.state == OPEN)
+	{
+		states_desc = get_statesdesc();
+		state_str = states_desc[self->state.id].str;
+		state_time = tv_to_ms(&self->state.time) - tv_to_ms(&self->roomdata->birth);
+			printf("%14ld %d %s\n", state_time, self->id, state_str);
+		if (self->state.id == died)
+			self->roomdata->table.state = CLOSED;
+	}
+	pthread_mutex_unlock(&(self->roomdata->printer));
 }

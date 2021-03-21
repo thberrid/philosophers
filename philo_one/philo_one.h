@@ -24,6 +24,8 @@
 # define P_ARG_MAXLEN 	6
 # define OPEN			1
 # define CLOSED			0
+# define FREE			1
+# define TAKEN			0
 # define BASE_DEC		"012345689"
 
 typedef struct	s_states_desc
@@ -54,6 +56,12 @@ typedef struct	s_meals
 	int				count;
 }				t_meals;
 
+typedef struct	s_mtxdata
+{
+	pthread_mutex_t		mutex;
+	char				data;
+}				t_mtxdata;
+
 typedef struct	s_roomdata
 {
 	int				philos_len;
@@ -63,17 +71,17 @@ typedef struct	s_roomdata
 	int				max_meals;
 	int				goaled;
 	struct timeval	birth;
-	char			table;
+	t_mtxdata		table;
 	pthread_mutex_t	printer;
 }				t_roomdata;
 
 typedef struct	s_philo
 {
 	int				id;
+	pthread_t		thread;
 	t_state			state;
 	t_meals			meals;
-	pthread_t		thread;
-	pthread_mutex_t fork;
+	t_mtxdata		fork;
 	struct s_philo	*neighboor;
 	t_roomdata		*roomdata;
 }				t_philo;

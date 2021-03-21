@@ -28,7 +28,7 @@ int		ft_usleep(long tt)
 	now = tv_to_ms(&tv);
 	while (now - start < tt)
 	{
-		usleep(25);
+		usleep(1000);
 		gettimeofday(&tv, NULL);
 		now = tv_to_ms(&tv);
 	}
