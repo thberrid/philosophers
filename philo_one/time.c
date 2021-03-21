@@ -1,28 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thberrid <thberrid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/08 16:17:18 by thberrid          #+#    #+#             */
-/*   Updated: 2021/03/08 16:20:15 by thberrid         ###   ########.fr       */
+/*   Created: 2021/03/21 10:45:59 by thberrid          #+#    #+#             */
+/*   Updated: 2021/03/21 10:46:01 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo_one.h>
 
-int		main(int ac, char **av)
+long	tv_to_ms(struct timeval *tv)
 {
-	t_roomdata		roomdata;
-	t_philo			*philos;
+	return ((tv->tv_sec * 1000) + (tv->tv_usec / 1000));
+}
 
-	if (data_set(ac, av, &roomdata, &philos))
-		return (0);
-	if (threads_launch(philos, &roomdata))
-		return (0);
-	threads_monitor(philos, &roomdata);
-	threads_gather(philos, roomdata.philos_len);
-	clean(philos, &roomdata);
+int		ft_usleep(long tt)
+{
+	struct timeval	tv;
+	long			start;
+	long			now;
+
+	gettimeofday(&tv, NULL);
+	start = tv_to_ms(&tv);
+	now = tv_to_ms(&tv);
+	while (now - start < tt)
+	{
+		usleep(25);
+		gettimeofday(&tv, NULL);
+		now = tv_to_ms(&tv);
+	}
 	return (0);
 }

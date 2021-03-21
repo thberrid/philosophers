@@ -12,12 +12,7 @@
 
 #include <philo_one.h>
 
-long	tv_to_ms(struct timeval *tv)
-{
-	return ((tv->tv_sec * 1000) + (tv->tv_usec / 1000));
-}
-
-void    ft_putnbr(long n)
+void					ft_putnbr(long n)
 {
 	char	c;
 
@@ -35,7 +30,7 @@ void    ft_putnbr(long n)
 
 static t_states_desc	*get_statesdesc(void)
 {
-	static t_states_desc states_desc[7] = {
+	static t_states_desc	states_desc[7] = {
 		{ "is thinking", 13 },
 		{ "is eating", 11 },
 		{ "is sleeping", 13 },
@@ -44,31 +39,32 @@ static t_states_desc	*get_statesdesc(void)
 		{ "new turn !", 4 },
 		{ NULL, 0 }
 	};
+
 	return (states_desc);
 }
 
-void	state_print(t_philo *self)
+void					state_print(t_philo *self)
 {
 	t_states_desc	*states_desc;
 	char			*state_str;
 	long			state_time;
-//	struct timeval	tvnow;
-//	long			now;
+	struct timeval	tvnow;
+	long			now;
 
 	states_desc = get_statesdesc();
 	state_str = states_desc[self->state.id].str;
-	state_time = tv_to_ms(&self->state.time) - tv_to_ms(&self->birth);
-	/*
+	state_time = tv_to_ms(&self->state.time) - tv_to_ms(&self->roomdata->birth);
 	if (DEBUG)
 	{
 		gettimeofday(&tvnow, NULL);
-		now = tv_to_ms(&tvnow) - tv_to_ms(&self->birth);
+		now = tv_to_ms(&tvnow) - tv_to_ms(&self->roomdata->birth);
 		printf("%6ld [%6ld] %d %s\n", state_time, now, self->id, state_str);
 	}
 	else
-	*/
-	if (self->roomdata->table.state == OPEN)
-		printf("%6ld %d %s\n", state_time, self->id, state_str);
-	if (self->state.id == died)
-		self->roomdata->table.state = CLOSED;
+	{
+		if (self->roomdata->table == OPEN)
+			printf("%6ld %d %s\n", state_time, self->id, state_str);
+		if (self->state.id == died)
+			self->roomdata->table = CLOSED;
+	}
 }

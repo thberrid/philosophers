@@ -48,12 +48,6 @@ enum			e_states
 	debug
 };
 
-typedef struct	s_table
-{
-	char			state;
-	pthread_mutex_t	mutex;
-}				t_table;
-
 typedef struct	s_state
 {
 	enum e_states	id;
@@ -73,7 +67,9 @@ typedef struct	s_roomdata
 	int				tt_eat;
 	int				tt_sleep;
 	int				max_meals;
-	t_table			table;
+	int				goaled;
+	struct timeval 	birth;
+	char			table;
 	pthread_mutex_t	printer;
 }				t_roomdata;
 
@@ -82,7 +78,6 @@ typedef struct	s_philo
 	int				id;
 	t_state			state;
 	t_meals			meals;
-	struct timeval 	birth;
 	pthread_t 		thread;
 	pthread_mutex_t fork;
 	struct s_philo	*neighboor;
@@ -92,9 +87,9 @@ typedef struct	s_philo
 
 typedef struct s_todolist
 {
-	int			(*pre_task)(t_philo *);
-	int			(*task)(t_philo *);
-	int			(*post_task)(t_philo *);
+	void			(*pre_task)(t_philo *);
+	void			(*task)(t_philo *);
+	void			(*post_task)(t_philo *);
 	enum e_states 	state;
 }				t_todolist;
 
@@ -107,18 +102,22 @@ int				args_get(int ac, char **av, t_roomdata *roomdata);
 int				threads_launch(t_philo *philos, t_roomdata *roomdata);
 void			threads_monitor(t_philo *philo, t_roomdata *roomdata);
 
-int				is_dead(t_philo *philo);
-int				dies(t_philo *self);
+void			*routine(void *data);
+int				is_this_the_end(t_philo *self);
+void			dies(t_philo *self);
 
+void 			eats(t_philo *self);
+void 			sleeps(t_philo *self);
+void 			takes_rightfork(t_philo *self);
+void 			takes_leftfork(t_philo *self);
+void			thinks(t_philo *self);
 
 long			tv_to_ms(struct timeval *tv);
+int 			ft_usleep(long tt);
 void			state_print(t_philo *philo);
-
-void			*routine(void *data);
 
 void			threads_gather(t_philo *philos, int max);
 void			clean(t_philo *philos, t_roomdata *roomdata);
 void			forksmutex_destroy(t_philo *philos, int len);
-void			roomdatamutex_destroy(t_roomdata *roomdata);
 
 #endif

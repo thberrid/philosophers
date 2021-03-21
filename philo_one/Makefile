@@ -14,14 +14,16 @@ HELL	= /bin/sh
 
 NAME	= philo_one
 
-C_NAME	= 	main.c \
-			args_ctr.c \
-			args_utils.c \
-			data_set.c \
-			clean.c \
-			hypervisor.c \
-			philo_actions.c \
-			print.c
+C_NAME	= 	main.c 			\
+			args_ctr.c 		\
+			clean.c 		\
+			environment.c 	\
+			ft_atoi.c 		\
+			hypervisor.c 	\
+			philo_actions.c	\
+			print.c 		\
+			routine.c 		\
+			time.c
 
 OBJ_NAME  = $(C_NAME:.c=.o)
 OBJ_DIR	  = obj

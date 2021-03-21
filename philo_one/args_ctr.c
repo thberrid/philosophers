@@ -14,9 +14,9 @@
 
 static int	args_len(int ac)
 {
-	if (ac <  P_ARG_MINLEN || ac >  P_ARG_MAXLEN)
+	if (ac < P_ARG_MINLEN || ac > P_ARG_MAXLEN)
 		return (1);
-	return (0); 
+	return (0);
 }
 
 static int	ft_isdigit(int c)

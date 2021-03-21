@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   initialization.c                                   :+:      :+:    :+:   */
+/*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thberrid <thberrid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/14 20:21:16 by thberrid          #+#    #+#             */
-/*   Updated: 2021/03/14 20:21:21 by thberrid         ###   ########.fr       */
+/*   Created: 2021/03/21 11:03:06 by thberrid          #+#    #+#             */
+/*   Updated: 2021/03/21 11:03:14 by thberrid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,13 @@ static int		roomdata_set(t_roomdata *roomdata)
 {
 	if (pthread_mutex_init(&roomdata->printer, NULL))
 		return (1);
-	roomdata->table.state = OPEN;
-	if (pthread_mutex_init(&roomdata->table.mutex, NULL))
-	{
-		pthread_mutex_destroy(&roomdata->printer);
-		return (1);
-	}
+	roomdata->table = OPEN;
+	roomdata->goaled = 0;
 	return (0);
 }
 
-int 			data_set
-(int ac, char **av, t_roomdata *roomdata, t_philo **philos)
+int				data_set
+	(int ac, char **av, t_roomdata *roomdata, t_philo **philos)
 {
 	if (args_get(ac, av, roomdata))
 		return (write(1, USAGE_STR, USAGE_LEN));

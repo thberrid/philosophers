@@ -12,64 +12,78 @@
 
 #include <philo_one.h>
 
-void	threads_monitor(t_philo *philo, t_roomdata *roomdata)
+static int	is_dead(t_philo *self)
 {
-	int				goaled;
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	if (tv_to_ms(&now) - tv_to_ms(&self->meals.time) >= self->roomdata->tt_die)
+		return (1);
+	return (0);
+}
+
+int			is_this_the_end(t_philo *self)
+{
+	if (self->roomdata->table == CLOSED)
+		return (1);
+	if (is_dead(self))
+	{
+		dies(self);
+		return (0);
+	}
+	return (0);
+}
+
+static int	is_goal_achieved(t_philo *self)
+{
+	t_roomdata *roomdata;
+
+	roomdata = self->roomdata;
+	if (roomdata->max_meals > 0
+		&& self->meals.count >= roomdata->max_meals)
+		roomdata->goaled += 1;
+	if (roomdata->goaled == roomdata->philos_len)
+	{
+		roomdata->table = CLOSED;
+		return (1);
+	}
+	return (0);
+}
+
+void		threads_monitor(t_philo *philo, t_roomdata *roomdata)
+{
 	t_philo			*first;
 
 	first = philo;
-	goaled = 0;
 	while (philo)
 	{
-		
-		if (roomdata->table.state == CLOSED)
-			return ;
-		
-		if (is_dead(philo))
-		{
-			dies(philo);
-			return ;
-		}
-		if (roomdata->max_meals > 0 
-			&& philo->meals.count >= roomdata->max_meals)
-			goaled += 1;
-		if (goaled == roomdata->philos_len)
-		{
-			roomdata->table.state = CLOSED;
-			return ;
-		}
+		if (is_this_the_end(philo))
+			break ;
+		if (is_goal_achieved(philo))
+			break ;
 		philo = philo->neighboor;
 		if (philo == first)
-			goaled = 0;
+			roomdata->goaled = 0;
 	}
 }
 
-static void	birth_set(struct timeval *birth, t_philo *this)
-{
-	this->birth.tv_sec = birth->tv_sec;
-	this->birth.tv_usec = birth->tv_usec;
-	this->meals.time.tv_sec = birth->tv_sec;
-	this->meals.time.tv_usec = birth->tv_usec;
-}
-
-int		threads_launch(t_philo	*philos, t_roomdata *roomdata)
+int			threads_launch(t_philo *philos, t_roomdata *roomdata)
 {
 	int				index;
-	struct timeval	birth;
 	int				max;
 
-	gettimeofday(&birth, NULL);
+	gettimeofday(&roomdata->birth, NULL);
 	index = 0;
 	max = roomdata->philos_len;
-	roomdata->table.state = OPEN;
+	roomdata->table = OPEN;
 	while (index < max)
 	{
-	//	if (philos[index].id % 2)
-//			usleep(50);
-		birth_set(&birth, &philos[index]);
-		if (pthread_create(&(philos[index].thread), NULL, &routine, &philos[index]))
+		if (philos[index].id % 2)
+			usleep(50);
+		if (pthread_create(&(philos[index].thread),
+			NULL, &routine, &philos[index]))
 		{
-			roomdata->table.state = CLOSED;
+			roomdata->table = CLOSED;
 			threads_gather(philos, index);
 			forksmutex_destroy(philos, max);
 			roomdatamutex_destroy(roomdata);
