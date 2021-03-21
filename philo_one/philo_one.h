@@ -18,16 +18,13 @@
 # include <pthread.h>
 # include <stdlib.h>
 # include <string.h>
-
 # include <stdio.h>
 
 # define P_ARG_MINLEN 	5
 # define P_ARG_MAXLEN 	6
-
-# define DEBUG			0
-
 # define OPEN			1
 # define CLOSED			0
+# define BASE_DEC		"012345689"
 
 typedef struct	s_states_desc
 {
