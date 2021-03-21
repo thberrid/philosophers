@@ -17,8 +17,18 @@ static int	is_dead(t_philo *self)
 	struct timeval	now;
 
 	gettimeofday(&now, NULL);
-	if (tv_to_ms(&now) - tv_to_ms(&self->meals.time) >= self->roomdata->tt_die)
-		return (1);
+	if (self->meals.count == 0)
+	{
+		if (tv_to_ms(&now) - tv_to_ms(&self->roomdata->birth)
+			>= self->roomdata->tt_die)
+			return (1);
+	}
+	else
+	{
+		if (tv_to_ms(&now) - tv_to_ms(&self->meals.time)
+			>= self->roomdata->tt_die)
+			return (1);
+	}
 	return (0);
 }
 
@@ -29,7 +39,7 @@ int			is_this_the_end(t_philo *self)
 	if (is_dead(self))
 	{
 		dies(self);
-		return (0);
+		return (1);
 	}
 	return (0);
 }
@@ -86,8 +96,7 @@ int			threads_launch(t_philo *philos, t_roomdata *roomdata)
 			roomdata->table = CLOSED;
 			threads_gather(philos, index);
 			forksmutex_destroy(philos, max);
-			roomdatamutex_destroy(roomdata);
-			free(philos);
+			clean(philos, roomdata);
 			return (1);
 		}
 		index += 1;

@@ -69,7 +69,10 @@ int				data_set
 	(int ac, char **av, t_roomdata *roomdata, t_philo **philos)
 {
 	if (args_get(ac, av, roomdata))
-		return (write(1, USAGE_STR, USAGE_LEN));
+	{
+		return (write(1, "usage: nb_of_philos tt_die tt_eat \
+tt_sleep [nb_of_meals]\n", 57));
+	}
 	if (roomdata_set(roomdata))
 		return (write(1, "room mutex error\n", 17));
 	if (philos_alloc(philos, roomdata))

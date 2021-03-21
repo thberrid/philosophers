@@ -23,9 +23,6 @@
 
 # define P_ARG_MINLEN 	5
 # define P_ARG_MAXLEN 	6
-# define USAGE_STR		"usage: nb_of_philo tt_die tt_eat \
-tt_sleep [nb_of_meals]\n"
-# define USAGE_LEN		56
 
 # define DEBUG			0
 
@@ -51,12 +48,12 @@ enum			e_states
 typedef struct	s_state
 {
 	enum e_states	id;
-	struct timeval 	time;
+	struct timeval	time;
 }				t_state;
 
 typedef struct	s_meals
 {
-	struct timeval 	time;
+	struct timeval	time;
 	int				count;
 }				t_meals;
 
@@ -68,7 +65,7 @@ typedef struct	s_roomdata
 	int				tt_sleep;
 	int				max_meals;
 	int				goaled;
-	struct timeval 	birth;
+	struct timeval	birth;
 	char			table;
 	pthread_mutex_t	printer;
 }				t_roomdata;
@@ -78,44 +75,37 @@ typedef struct	s_philo
 	int				id;
 	t_state			state;
 	t_meals			meals;
-	pthread_t 		thread;
+	pthread_t		thread;
 	pthread_mutex_t fork;
 	struct s_philo	*neighboor;
 	t_roomdata		*roomdata;
 }				t_philo;
 
-
-typedef struct s_todolist
+typedef struct	s_todolist
 {
 	void			(*pre_task)(t_philo *);
 	void			(*task)(t_philo *);
 	void			(*post_task)(t_philo *);
-	enum e_states 	state;
+	enum e_states	state;
 }				t_todolist;
 
-
 int				ft_atoi(const char *str);
-
-int				data_set(int ac, char **av, t_roomdata *roomdata, t_philo **philos);
+int				data_set
+				(int ac, char **av, t_roomdata *roomdata, t_philo **philos);
 int				args_get(int ac, char **av, t_roomdata *roomdata);
-
 int				threads_launch(t_philo *philos, t_roomdata *roomdata);
 void			threads_monitor(t_philo *philo, t_roomdata *roomdata);
-
 void			*routine(void *data);
 int				is_this_the_end(t_philo *self);
 void			dies(t_philo *self);
-
-void 			eats(t_philo *self);
-void 			sleeps(t_philo *self);
-void 			takes_rightfork(t_philo *self);
-void 			takes_leftfork(t_philo *self);
+void			eats(t_philo *self);
+void			sleeps(t_philo *self);
+void			takes_rightfork(t_philo *self);
+void			takes_leftfork(t_philo *self);
 void			thinks(t_philo *self);
-
 long			tv_to_ms(struct timeval *tv);
-int 			ft_usleep(long tt);
+int				ft_usleep(long tt);
 void			state_print(t_philo *philo);
-
 void			threads_gather(t_philo *philos, int max);
 void			clean(t_philo *philos, t_roomdata *roomdata);
 void			forksmutex_destroy(t_philo *philos, int len);
