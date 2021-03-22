@@ -12,50 +12,32 @@
 
 #include <philo_one.h>
 
-int		mutex_access(t_mtx *obj, int (*ctr)(char), int (*apply)(char, char), char val)
-{
-	int		retrn;
-
-	pthread_mutex_lock(obj->mutex);
-	retrn = ctr(obj->val);
-	if (retrn)
-		apply(obj, val);
-	pthread_mutex_unlock(obj->mutex);
-	return (retrn);
-}
-
-void	eats(t_philo *self)
+int	eats(t_philo *self)
 {
 	ft_usleep(self->roomdata->tt_eat);
-	pthread_mutex_unlock(&self->neighboor->fork);
-	pthread_mutex_unlock(&self->fork);
+	mutex_access(&self->fork, self, noctr, apply_fork_free);
+	mutex_access(&self->neighboor->fork, self, noctr, apply_fork_free);
+	return (0);
 }
 
-void	sleeps(t_philo *self)
+int	sleeps(t_philo *self)
 {
 	ft_usleep(self->roomdata->tt_sleep);
+	return (0);
 }
 
-void	takes_rightfork(t_philo *self)
+int	takes_rightfork(t_philo *self)
 {
-
-		pthread_mutex_lock(&(self->neighboor->fork));
+	return (mutex_access(&self->neighboor->fork, self, ctr_getdata, apply_fork_take));
 }	
 
-void	takes_leftfork(t_philo *self)
+int	takes_leftfork(t_philo *self)
 {
-	pthread_mutex_lock(&(self->fork.mutex));
-	if (self->fork.data == FREE)
-	{
-		self->fork.data = self->id;
-		self->state.id = has_taken_a_fork;
-		gettimeofday(&self->state.time, NULL);
-		state_print(self);
-	}
-	pthread_mutex_lock(&(self->neighboor->fork));
+	return (mutex_access(&self->fork, self, ctr_getdata, apply_fork_take));
 }
 
-void	thinks(t_philo *self)
+int	thinks(t_philo *self)
 {
 	(void)self;
+	return (0);
 }

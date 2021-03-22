@@ -35,9 +35,9 @@ void				dies(t_philo *self)
 
 static t_todolist	*get_todolist(void)
 {
-	static t_todolist todolist[5] = {
+	static t_todolist todolist[6] = {
 		{ &thinks, &takes_leftfork, &update_time, has_taken_a_fork },
-	//	{ &thinks, &takes_rightfork, &update_time, has_taken_a_fork },
+		{ &thinks, &takes_rightfork, &update_time, has_taken_a_fork },
 		{ &update_mealdata, &eats, &thinks, is_eating },
 		{ &update_time, &sleeps, &thinks, is_sleeping },
 		{ &update_time, &thinks, &thinks, is_thinking },
@@ -45,6 +45,39 @@ static t_todolist	*get_todolist(void)
 	};
 
 	return (todolist);
+}
+
+
+static int	is_dead(t_philo *self)
+{
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	if (self->meals.count == 0)
+	{
+		if (tv_to_ms(&now) - tv_to_ms(&self->roomdata->birth)
+			>= self->roomdata->tt_die)
+			return (1);
+	}
+	else
+	{
+		if (tv_to_ms(&now) - tv_to_ms(&self->meals.time)
+			>= self->roomdata->tt_die)
+			return (1);
+	}
+	return (0);
+}
+
+int			is_this_the_end(t_philo *self)
+{
+	if (mutex_access(&self->roomdata->printer, self, noctr, apply_getdata))
+		return (1);
+	if (is_dead(self))
+	{
+		dies(self);
+		return (1);
+	}
+	return (0);
 }
 
 void				*routine(void *data)
@@ -56,12 +89,10 @@ void				*routine(void *data)
 	todo = get_todolist();
 	philo = (t_philo *)data;
 	current_state = 0;
-	if (philo->id % 2)
-		usleep(1000);
+//	if (philo->id % 2)
+//		usleep(1000);
 	while (1)
 	{
-		if (is_this_the_end(philo))//?????
-			break ;
 		philo->state.id = todo[current_state].state;
 		todo[current_state].pre_task(philo);
 		if (todo[current_state].task(philo))
@@ -70,6 +101,8 @@ void				*routine(void *data)
 		current_state += 1;
 		if (!todo[current_state].task)
 			current_state = 0;
+		if (is_this_the_end(philo))
+			break ;
 	}
 	return (philo);
 }

@@ -26,7 +26,6 @@
 # define CLOSED			0
 # define FREE			1
 # define TAKEN			0
-# define BASE_DEC		"012345689"
 
 typedef struct	s_states_desc
 {
@@ -62,17 +61,21 @@ typedef struct	s_mtxdata
 	char				data;
 }				t_mtxdata;
 
+typedef struct	s_timeto
+{
+	int				die;
+	int				eat;
+	int				sleep;
+}				t_timeto;
+
 typedef struct	s_roomdata
 {
 	int				philos_len;
-	int				tt_die;
-	int				tt_eat;
-	int				tt_sleep;
-	int				max_meals;
+	t_timeto		tt;
 	int				goaled;
+	int				max_meals;
 	struct timeval	birth;
-	t_mtxdata		table;
-	pthread_mutex_t	printer;
+	t_mtxdata		printer;
 }				t_roomdata;
 
 typedef struct	s_philo
@@ -82,8 +85,8 @@ typedef struct	s_philo
 	t_state			state;
 	t_meals			meals;
 	t_mtxdata		fork;
-	struct s_philo	*neighboor;
 	t_roomdata		*roomdata;
+	struct s_philo	*neighboor;
 }				t_philo;
 
 typedef struct	s_todolist
@@ -102,12 +105,12 @@ int				threads_launch(t_philo *philos, t_roomdata *roomdata);
 void			threads_monitor(t_philo *philo, t_roomdata *roomdata);
 void			*routine(void *data);
 int				is_this_the_end(t_philo *self);
-void			dies(t_philo *self);
-void			eats(t_philo *self);
-void			sleeps(t_philo *self);
-void			takes_rightfork(t_philo *self);
-void			takes_leftfork(t_philo *self);
-void			thinks(t_philo *self);
+int				dies(t_philo *self);
+int				eats(t_philo *self);
+int				sleeps(t_philo *self);
+int				takes_rightfork(t_philo *self);
+int				takes_leftfork(t_philo *self);
+int				thinks(t_philo *self);
 long			tv_to_ms(struct timeval *tv);
 int				ft_usleep(long tt);
 void			state_print(t_philo *philo);
