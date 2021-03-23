@@ -35,18 +35,19 @@ void				*routine(void *data)
 	todo = get_todolist();
 	philo = (t_philo *)data;
 	current_state = 0;
-//	if (philo->id % 2)
-//		usleep(1000);
+	if (philo->id % 2)
+		usleep(1000);
 	while (1)
 	{
 		philo->state.id = todo[current_state].state;
 		todo[current_state].pre_task(philo);
-		if (todo[current_state].task(philo))
-			continue ;
-		todo[current_state].post_task(philo);
-		current_state += 1;
-		if (!todo[current_state].task)
-			current_state = 0;
+		if (!todo[current_state].task(philo))
+		{
+			todo[current_state].post_task(philo);
+			current_state += 1;
+			if (!todo[current_state].task)
+				current_state = 0;
+		}
 		if (is_this_the_end(philo))
 			break ;
 	}

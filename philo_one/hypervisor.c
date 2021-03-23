@@ -17,6 +17,8 @@ static int	is_goal_achieved(t_philo *self)
 	t_roomdata *roomdata;
 
 	roomdata = self->roomdata;
+	if (mutex_access(&roomdata->printer, NULL, ctr_is_open, apply_getdata))
+		return (1);
 	if (roomdata->max_meals > 0
 		&& self->meals.count >= roomdata->max_meals)
 		roomdata->goaled += 1;
