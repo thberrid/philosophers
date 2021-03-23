@@ -53,9 +53,9 @@ int			args_get(int ac, char **av, t_roomdata *roomdata)
 	if (args_digitsonly(ac, av))
 		return (1);
 	roomdata->philos_len = ft_atoi(av[1]);
-	roomdata->tt_die = ft_atoi(av[2]);
-	roomdata->tt_eat = ft_atoi(av[3]);
-	roomdata->tt_sleep = ft_atoi(av[4]);
+	roomdata->tt.die = ft_atoi(av[2]);
+	roomdata->tt.eat = ft_atoi(av[3]);
+	roomdata->tt.sleep = ft_atoi(av[4]);
 	roomdata->max_meals = -1;
 	if (ac > P_ARG_MINLEN)
 		roomdata->max_meals = ft_atoi(av[5]);

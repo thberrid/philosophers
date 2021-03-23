@@ -12,7 +12,7 @@
 
 #include <philo_one.h>
 
-int		ctr_getdata(t_mtxdata *obj)
+int		ctr_is_open(t_mtxdata *obj)
 {
 	return (obj->data);
 }

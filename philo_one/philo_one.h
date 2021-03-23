@@ -22,10 +22,10 @@
 
 # define P_ARG_MINLEN 	5
 # define P_ARG_MAXLEN 	6
-# define OPEN			1
-# define CLOSED			0
-# define FREE			1
-# define TAKEN			0
+# define OPEN			0
+# define CLOSED			1
+# define FREE			0
+# define TAKEN			1
 
 typedef struct	s_states_desc
 {
@@ -91,9 +91,9 @@ typedef struct	s_philo
 
 typedef struct	s_todolist
 {
-	void			(*pre_task)(t_philo *);
-	void			(*task)(t_philo *);
-	void			(*post_task)(t_philo *);
+	int				(*pre_task)(t_philo *);
+	int				(*task)(t_philo *);
+	int				(*post_task)(t_philo *);
 	enum e_states	state;
 }				t_todolist;
 
@@ -101,18 +101,30 @@ int				ft_atoi(const char *str);
 int				data_set
 				(int ac, char **av, t_roomdata *roomdata, t_philo **philos);
 int				args_get(int ac, char **av, t_roomdata *roomdata);
+int				mutex_access(t_mtxdata *obj, t_philo *self,
+				int (*ctr)(t_mtxdata *), int (*apply)(t_mtxdata *, t_philo *));
+int				apply_print(t_mtxdata *obj, t_philo *self);
+int				apply_close(t_mtxdata *obj, t_philo *useless);
+int				apply_getdata(t_mtxdata *obj, t_philo *useless);
+int 			apply_fork_free(t_mtxdata *obj, t_philo *useless);
+int 			apply_fork_take(t_mtxdata *obj, t_philo *self);
+int				ctr_is_open(t_mtxdata *obj);
+int				noctr(t_mtxdata *useless);
 int				threads_launch(t_philo *philos, t_roomdata *roomdata);
 void			threads_monitor(t_philo *philo, t_roomdata *roomdata);
 void			*routine(void *data);
 int				is_this_the_end(t_philo *self);
-int				dies(t_philo *self);
+void			dies(t_philo *self);
 int				eats(t_philo *self);
 int				sleeps(t_philo *self);
+int				thinks(t_philo *self);
+int				update_time(t_philo *self);
+int				update_mealtime(t_philo *self);
 int				takes_rightfork(t_philo *self);
 int				takes_leftfork(t_philo *self);
-int				thinks(t_philo *self);
 long			tv_to_ms(struct timeval *tv);
 int				ft_usleep(long tt);
+t_states_desc	*get_statesdesc(void);
 void			state_print(t_philo *philo);
 void			threads_gather(t_philo *philos, int max);
 void			clean(t_philo *philos, t_roomdata *roomdata);

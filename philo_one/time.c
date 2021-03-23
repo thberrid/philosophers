@@ -12,6 +12,22 @@
 
 #include <philo_one.h>
 
+
+int				update_time(t_philo *self)
+{
+	gettimeofday(&self->state.time, NULL);
+	state_print(self);
+	return  (0);
+}
+
+int				update_mealtime(t_philo *self)
+{
+	gettimeofday(&self->meals.time, NULL);
+	gettimeofday(&self->state.time, NULL);
+	state_print(self);
+	return (0);
+}
+
 long	tv_to_ms(struct timeval *tv)
 {
 	return ((tv->tv_sec * 1000) + (tv->tv_usec / 1000));

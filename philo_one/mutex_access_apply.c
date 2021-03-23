@@ -20,10 +20,19 @@ int		apply_print(t_mtxdata *obj, t_philo *self)
 
 	if (self->state.id == died)
 		obj->data = CLOSED;
+	if (self->state.id == is_eating)
+		self->meals.count += 1;
 	states_desc = get_statesdesc();
 	state_str = states_desc[self->state.id].str;
 	state_time = tv_to_ms(&self->state.time) - tv_to_ms(&self->roomdata->birth);
 	printf("%14ld %d %s\n", state_time, self->id, state_str);
+	return (0);
+}
+
+int		apply_close(t_mtxdata *obj, t_philo *useless)
+{
+	(void)useless;
+	obj->data = CLOSED;
 	return (0);
 }
 

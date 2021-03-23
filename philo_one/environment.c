@@ -29,7 +29,7 @@ static int		philo_set(t_philo *philos, t_roomdata *roomdata, int index)
 	this->meals.count = 0;
 	this->neighboor = philo_find_neighboor(philos, index, roomdata->philos_len);
 	this->roomdata = roomdata;
-	if (pthread_mutex_init(&(this->fork), NULL))
+	if (pthread_mutex_init(&(this->fork.mutex), NULL))
 		return (1);
 	return (0);
 }
@@ -58,11 +58,9 @@ static int		philos_alloc(t_philo **philos, t_roomdata *roomdata)
 
 static int		roomdata_set(t_roomdata *roomdata)
 {
-	if (pthread_mutex_init(&roomdata->printer, NULL))
+	if (pthread_mutex_init(&roomdata->printer.mutex, NULL))
 		return (1);
-	if (pthread_mutex_init(&roomdata->table.mutex, NULL))
-		return (1);
-	roomdata->table.state = OPEN;
+	roomdata->printer.data = OPEN;
 	roomdata->goaled = 0;
 	return (0);
 }
