@@ -106,8 +106,8 @@ int				mutex_access(t_mtxdata *obj, t_philo *self,
 int				apply_print(t_mtxdata *obj, t_philo *self);
 int				apply_close(t_mtxdata *obj, t_philo *useless);
 int				apply_getdata(t_mtxdata *obj, t_philo *useless);
-int 			apply_fork_free(t_mtxdata *obj, t_philo *useless);
-int 			apply_fork_take(t_mtxdata *obj, t_philo *self);
+int				apply_fork_free(t_mtxdata *obj, t_philo *useless);
+int				apply_fork_take(t_mtxdata *obj, t_philo *self);
 int				ctr_is_open(t_mtxdata *obj);
 int				noctr(t_mtxdata *useless);
 int				threads_launch(t_philo *philos, t_roomdata *roomdata);

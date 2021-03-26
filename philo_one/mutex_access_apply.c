@@ -42,14 +42,14 @@ int		apply_getdata(t_mtxdata *obj, t_philo *useless)
 	return (obj->data);
 }
 
-int 	apply_fork_free(t_mtxdata *obj, t_philo *useless)
+int		apply_fork_free(t_mtxdata *obj, t_philo *useless)
 {
 	(void)useless;
 	obj->data = FREE;
 	return (0);
 }
 
-int 	apply_fork_take(t_mtxdata *obj, t_philo *self)
+int		apply_fork_take(t_mtxdata *obj, t_philo *self)
 {
 	obj->data = self->id;
 	return (0);

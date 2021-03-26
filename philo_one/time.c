@@ -12,15 +12,14 @@
 
 #include <philo_one.h>
 
-
-int				update_time(t_philo *self)
+int		update_time(t_philo *self)
 {
 	gettimeofday(&self->state.time, NULL);
 	state_print(self);
-	return  (0);
+	return (0);
 }
 
-int				update_mealtime(t_philo *self)
+int		update_mealtime(t_philo *self)
 {
 	gettimeofday(&self->meals.time, NULL);
 	gettimeofday(&self->state.time, NULL);

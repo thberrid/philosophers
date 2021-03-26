@@ -28,8 +28,13 @@ int	sleeps(t_philo *self)
 
 int	takes_rightfork(t_philo *self)
 {
-	return (mutex_access(&self->neighboor->fork, self, ctr_is_open, apply_fork_take));
-}	
+	int			retrn;
+	t_mtxdata	*right_fork;
+
+	right_fork = &self->neighboor->fork;
+	retrn = mutex_access(right_fork, self, ctr_is_open, apply_fork_take);
+	return (retrn);
+}
 
 int	takes_leftfork(t_philo *self)
 {

@@ -27,7 +27,7 @@ t_states_desc	*get_statesdesc(void)
 	return (states_desc);
 }
 
-void state_print(t_philo *self)
+void			state_print(t_philo *self)
 {
 	t_mtxdata *printer;
 

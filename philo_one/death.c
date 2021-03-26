@@ -32,7 +32,7 @@ static int	is_dead(t_philo *self)
 	return (0);
 }
 
-void				dies(t_philo *self)
+void		dies(t_philo *self)
 {
 	gettimeofday(&self->state.time, NULL);
 	self->state.id = died;
