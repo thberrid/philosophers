@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.h                                        :+:      :+:    :+:   */
+/*   philo_two.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thberrid <thberrid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,12 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <fcntl.h>
 # include <stdlib.h>
 # include <string.h>
 # include <stdio.h>
@@ -27,8 +28,6 @@
 # define CLOSED			1
 # define FREE			0
 # define TAKEN			1
-
-sem_t *sem;
 
 typedef struct	s_states_desc
 {
@@ -57,19 +56,22 @@ typedef struct	s_meals
 	struct timeval	time;
 	int				count;
 }				t_meals;
-
+/*
 typedef struct	s_mtxdata
 {
 	pthread_mutex_t		mutex;
 	char				data;
 }				t_mtxdata;
-
+*/
 typedef struct	s_timeto
 {
 	int				die;
 	int				eat;
 	int				sleep;
 }				t_timeto;
+
+# define SEMNAME_PRINTER	"PRINT"
+# define SEMNAME_FORKS		"FORKS"
 
 typedef struct	s_roomdata
 {
@@ -78,7 +80,9 @@ typedef struct	s_roomdata
 	int				goaled;
 	int				max_meals;
 	struct timeval	birth;
-	t_mtxdata		printer;
+	sem_t			forks_bunch;
+	sem_t			printer;
+//	t_mtxdata		printer;
 }				t_roomdata;
 
 typedef struct	s_philo
@@ -87,7 +91,7 @@ typedef struct	s_philo
 	pthread_t		thread;
 	t_state			state;
 	t_meals			meals;
-	t_mtxdata		fork;
+//	t_mtxdata		fork;
 	t_roomdata		*roomdata;
 	struct s_philo	*neighboor;
 }				t_philo;
@@ -104,6 +108,7 @@ int				ft_atoi(const char *str);
 int				data_set
 				(int ac, char **av, t_roomdata *roomdata, t_philo **philos);
 int				args_get(int ac, char **av, t_roomdata *roomdata);
+/*
 int				mutex_access(t_mtxdata *obj, t_philo *self,
 				int (*ctr)(t_mtxdata *), int (*apply)(t_mtxdata *, t_philo *));
 int				apply_print(t_mtxdata *obj, t_philo *self);
@@ -113,6 +118,7 @@ int				apply_fork_free(t_mtxdata *obj, t_philo *useless);
 int				apply_fork_take(t_mtxdata *obj, t_philo *self);
 int				ctr_is_open(t_mtxdata *obj);
 int				noctr(t_mtxdata *useless);
+*/
 int				threads_launch(t_philo *philos, t_roomdata *roomdata);
 void			threads_monitor(t_philo *philo, t_roomdata *roomdata);
 void			*routine(void *data);

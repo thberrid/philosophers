@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo_one.h>
+#include <philo_two.h>
 
 static int	args_len(int ac)
 {

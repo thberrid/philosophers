@@ -48,6 +48,7 @@ void				*routine(void *data)
 			if (!todo[current_state].task)
 				current_state = 0;
 		}
+		usleep(50);
 		if (is_this_the_end(philo))
 			break ;
 	}

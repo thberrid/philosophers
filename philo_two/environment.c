@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo_one.h>
+#include <philo_two.h>
 
 static t_philo	*philo_find_neighboor(t_philo *philos, int index, int max)
 {
@@ -47,7 +47,7 @@ static int		philos_alloc(t_philo **philos, t_roomdata *roomdata)
 	{
 		if (philo_set(*philos, roomdata, index))
 		{
-			forksmutex_destroy(*philos, index - 1);
+//			forksmutex_destroy(*philos, index - 1);
 			free(*philos);
 			return (1);
 		}
@@ -58,9 +58,13 @@ static int		philos_alloc(t_philo **philos, t_roomdata *roomdata)
 
 static int		roomdata_set(t_roomdata *roomdata)
 {
+	/*
 	if (pthread_mutex_init(&roomdata->printer.mutex, NULL))
 		return (1);
 	roomdata->printer.data = OPEN;
+	*/
+	sem_open(SEMNAME_FORKS, O_CREAT, roomdata->philos_len);
+	sem_open(SEMNAME_PRINTER, O_CREAT, 1);
 	roomdata->goaled = 0;
 	return (0);
 }

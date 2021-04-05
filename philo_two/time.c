@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo_one.h>
+#include <philo_two.h>
 
 int		update_time(t_philo *self)
 {

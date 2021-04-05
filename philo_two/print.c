@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo_one.h>
+#include <philo_two.h>
 
 t_states_desc	*get_statesdesc(void)
 {

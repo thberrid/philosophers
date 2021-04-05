@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo_one.h>
+#include <philo_two.h>
 
 int		ctr_is_open(t_mtxdata *obj)
 {

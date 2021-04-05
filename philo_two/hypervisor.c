@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo_one.h>
+#include <philo_two.h>
 
 static int	is_goal_achieved(t_philo *self)
 {
@@ -60,7 +60,7 @@ int			threads_launch(t_philo *philos, t_roomdata *roomdata)
 		{
 			mutex_access(&roomdata->printer, NULL, noctr, apply_close);
 			threads_gather(philos, index);
-			forksmutex_destroy(philos, max);
+//			forksmutex_destroy(philos, max);
 			clean(philos, roomdata);
 			write(1, "philo pthread creation error\n", 29);
 			return (1);

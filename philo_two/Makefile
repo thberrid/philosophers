@@ -12,7 +12,7 @@
 
 HELL	= /bin/sh
 
-NAME	= philo_one
+NAME	= philo_two
 
 C_NAME	= 	main.c 					\
 			args_ctr.c 				\
