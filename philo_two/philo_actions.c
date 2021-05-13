@@ -15,8 +15,8 @@
 int	eats(t_philo *self)
 {
 	ft_usleep(self->roomdata->tt.eat);
-	sem_post(&self->roomdata->forks_bunch);
-	sem_post(&self->roomdata->forks_bunch);
+	sem_post(self->roomdata->forks_bunch);
+	sem_post(self->roomdata->forks_bunch);
 	/*
 	ft_usleep(self->roomdata->tt.eat);
 	mutex_access(&self->fork, self, noctr, apply_fork_free);
@@ -33,7 +33,7 @@ int	sleeps(t_philo *self)
 
 int	takes_rightfork(t_philo *self)
 {
-	sem_wait(&self->roomdata->forks_bunch);
+	sem_wait(self->roomdata->forks_bunch);
 	return (0);
 	/*
 	int			retrn;
@@ -47,10 +47,11 @@ int	takes_rightfork(t_philo *self)
 
 int	takes_leftfork(t_philo *self)
 {
-	sem_wait(&self->roomdata->forks_bunch);
+	sem_wait(self->roomdata->forks_bunch);
 	/*
 	return (mutex_access(&self->fork, self, ctr_is_open, apply_fork_take));
 	*/
+	return (0);
 }
 
 int	thinks(t_philo *self)

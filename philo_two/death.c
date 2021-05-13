@@ -41,8 +41,10 @@ void		dies(t_philo *self)
 
 int			is_this_the_end(t_philo *self)
 {
+	/*
 	if (mutex_access(&self->roomdata->printer, self, noctr, apply_getdata))
 		return (1);
+	*/
 	if (is_dead(self))
 	{
 		dies(self);

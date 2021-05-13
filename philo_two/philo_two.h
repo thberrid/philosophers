@@ -21,6 +21,7 @@
 # include <string.h>
 # include <stdio.h>
 # include <semaphore.h>
+ #include <errno.h>
 
 # define P_ARG_MINLEN 	5
 # define P_ARG_MAXLEN 	6
@@ -80,8 +81,8 @@ typedef struct	s_roomdata
 	int				goaled;
 	int				max_meals;
 	struct timeval	birth;
-	sem_t			forks_bunch;
-	sem_t			printer;
+	sem_t			*forks_bunch;
+	sem_t			*printer;
 //	t_mtxdata		printer;
 }				t_roomdata;
 

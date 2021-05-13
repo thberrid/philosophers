@@ -21,13 +21,13 @@ C_NAME	= 	main.c 					\
 			environment.c 			\
 			ft_atoi.c 				\
 			hypervisor.c 			\
-			mutex_access.c			\
-			mutex_access_apply.c	\
-			mutex_access_ctr.c		\
 			philo_actions.c			\
 			print.c 				\
 			routine.c 				\
 			time.c
+#			mutex_access.c			
+#			mutex_access_apply.c	
+#			mutex_access_ctr.c		
 
 OBJ_NAME  = $(C_NAME:.c=.o)
 OBJ_DIR	  = obj

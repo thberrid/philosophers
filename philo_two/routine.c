@@ -36,7 +36,7 @@ void				*routine(void *data)
 	philo = (t_philo *)data;
 	current_state = 0;
 	if (philo->id % 2)
-		usleep(1000);
+		usleep(2000);
 	while (1)
 	{
 		philo->state.id = todo[current_state].state;

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <philo_two.h>
-
+/*
 void	forksmutex_destroy(t_philo *philos, int len)
 {
 	int		index;
@@ -23,7 +23,7 @@ void	forksmutex_destroy(t_philo *philos, int len)
 		index += 1;
 	}
 }
-
+*/
 void	threads_gather(t_philo *philos, int max)
 {
 	int		index;
@@ -38,6 +38,8 @@ void	threads_gather(t_philo *philos, int max)
 
 void	clean(t_philo *philos, t_roomdata *roomdata)
 {
-	pthread_mutex_destroy(&roomdata->printer.mutex);
+//	pthread_mutex_destroy(&roomdata->printer.mutex);
+	sem_close(&roomdata->printer);
+	sem_close(&roomdata->forks_bunch);
 	free(philos);
 }

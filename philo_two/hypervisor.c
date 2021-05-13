@@ -17,14 +17,16 @@ static int	is_goal_achieved(t_philo *self)
 	t_roomdata *roomdata;
 
 	roomdata = self->roomdata;
+	/*
 	if (mutex_access(&roomdata->printer, NULL, ctr_is_open, apply_getdata))
 		return (1);
+	*/
 	if (roomdata->max_meals > 0
 		&& self->meals.count >= roomdata->max_meals)
 		roomdata->goaled += 1;
 	if (roomdata->goaled == roomdata->philos_len)
 	{
-		mutex_access(&roomdata->printer, NULL, noctr, apply_close);
+	//	mutex_access(&roomdata->printer, NULL, noctr, apply_close);
 		return (1);
 	}
 	return (0);
@@ -58,7 +60,7 @@ int			threads_launch(t_philo *philos, t_roomdata *roomdata)
 		if (pthread_create(&(philos[index].thread),
 			NULL, &routine, &philos[index]))
 		{
-			mutex_access(&roomdata->printer, NULL, noctr, apply_close);
+		//	mutex_access(&roomdata->printer, NULL, noctr, apply_close);
 			threads_gather(philos, index);
 //			forksmutex_destroy(philos, max);
 			clean(philos, roomdata);
