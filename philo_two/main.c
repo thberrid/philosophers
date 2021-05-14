@@ -18,9 +18,9 @@ int		main(int ac, char **av)
 	t_philo			*philos;
 
 	if (data_set(ac, av, &roomdata, &philos))
-		return (0);
+		return (1);
 	if (threads_launch(philos, &roomdata))
-		return (0);
+		return (1);
 	threads_monitor(philos, &roomdata);
 	threads_gather(philos, roomdata.philos_len);
 	clean(philos, &roomdata);

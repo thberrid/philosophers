@@ -80,6 +80,7 @@ typedef struct	s_roomdata
 	t_timeto		tt;
 	int				goaled;
 	int				max_meals;
+	char			status;
 	struct timeval	birth;
 	sem_t			*forks_bunch;
 	sem_t			*printer;
@@ -124,6 +125,8 @@ int				threads_launch(t_philo *philos, t_roomdata *roomdata);
 void			threads_monitor(t_philo *philo, t_roomdata *roomdata);
 void			*routine(void *data);
 int				is_this_the_end(t_philo *self);
+int				is_room_closed(t_philo *self);
+void			close_room(t_roomdata *roomdata);
 void			dies(t_philo *self);
 int				eats(t_philo *self);
 int				sleeps(t_philo *self);

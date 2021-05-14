@@ -39,12 +39,27 @@ void		dies(t_philo *self)
 	state_print(self);
 }
 
+int			is_room_closed(t_philo *self)
+{
+	int		retrn;
+
+	sem_wait(self->roomdata->printer);
+	retrn = self->roomdata->status;
+	sem_post(self->roomdata->printer);
+	return (retrn);
+}
+
+void		close_room(t_roomdata *roomdata)
+{
+	sem_wait(roomdata->printer);
+	roomdata->status = CLOSED;
+	sem_post(roomdata->printer);
+}
+
 int			is_this_the_end(t_philo *self)
 {
-	/*
-	if (mutex_access(&self->roomdata->printer, self, noctr, apply_getdata))
+	if (is_room_closed(self))
 		return (1);
-	*/
 	if (is_dead(self))
 	{
 		dies(self);

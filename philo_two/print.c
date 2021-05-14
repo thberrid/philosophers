@@ -34,21 +34,13 @@ void			state_print(t_philo *self)
 	char			*state_str;
 
 	sem_wait(self->roomdata->printer);
-	/*
 	if (self->state.id == died)
-		obj->data = CLOSED;
+		self->roomdata->status = CLOSED;
 	if (self->state.id == is_eating)
 		self->meals.count += 1;
-	*/
 	states_desc = get_statesdesc();
 	state_str = states_desc[self->state.id].str;
 	state_time = tv_to_ms(&self->state.time) - tv_to_ms(&self->roomdata->birth);
 	printf("%14ld %d %s\n", state_time, self->id, state_str);
 	sem_post(self->roomdata->printer);
-	/*
-	t_mtxdata *printer;
-
-	printer = &self->roomdata->printer;
-	mutex_access(printer, self, ctr_is_open, apply_print);
-	*/
 }

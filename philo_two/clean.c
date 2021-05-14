@@ -38,8 +38,7 @@ void	threads_gather(t_philo *philos, int max)
 
 void	clean(t_philo *philos, t_roomdata *roomdata)
 {
-//	pthread_mutex_destroy(&roomdata->printer.mutex);
-	sem_close(&roomdata->printer);
-	sem_close(&roomdata->forks_bunch);
+	sem_close(roomdata->printer);
+	sem_close(roomdata->forks_bunch);
 	free(philos);
 }
