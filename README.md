@@ -120,20 +120,30 @@ exit(int status)
 #include <unistd.h>
 pid_t fork(void);
 ```
-if fail : -1
-0 = parent
-< 0 new child process
+return :
+
+	if fail : -1
+
+	0 = process is child
+
+	< 0 proccess is the caller. The returnd value corresponds to the child pid 
+
 ```
 #include <sys/types.h>
 #include <sys/wait.h>
 pid_t waitpid(pid_t pid, int *wstatus, int options);
 ```
 pid  	< -1 	: any child process with gr ID = pid
+
 		-1		: any child process
-		0		: meaning wait for any child process whose process group ID is equal to that of the calling process
+
+		0		: meaning wait for any child process whose process group ID is  equal to that of the calling process
+
 		> 0		: wait forthe this child process
 
 options		WTERMSIG: returns the number of the signal that caused the child process to terminate
+
 			WSTOPSIG: returns the number of the signal which caused the child to stop.
 			...
+
 note : wstatus, if exit 1, wstatus = 256 (1 << 8) ; if exit(2) wstatus = 512 (1 << 9)
