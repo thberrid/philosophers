@@ -113,8 +113,8 @@ int sem_close(sem_t *sem);
 # process
 
 ```
-kill
-exit
+kill(pid, signal (9 is good))
+exit(int status)
 ```
 ```
 #include <unistd.h>
@@ -136,3 +136,4 @@ pid  	< -1 	: any child process with gr ID = pid
 options		WTERMSIG: returns the number of the signal that caused the child process to terminate
 			WSTOPSIG: returns the number of the signal which caused the child to stop.
 			...
+note : wstatus, if exit 1, wstatus = 256 (1 << 8) ; if exit(2) wstatus = 512 (1 << 9)
