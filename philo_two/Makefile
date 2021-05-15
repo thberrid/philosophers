@@ -24,14 +24,12 @@ C_NAME	= 	main.c 					\
 			philo_actions.c			\
 			print.c 				\
 			routine.c 				\
-			time.c
-#			mutex_access.c			
-#			mutex_access_apply.c	
-#			mutex_access_ctr.c		
+			time.c	
 
 OBJ_NAME  = $(C_NAME:.c=.o)
 OBJ_DIR	  = obj
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJ_NAME))
+FILES_H	  = philo_two.h
 
 CFLAGS	= -Wall -Wextra -Werror -g3 #-fsanitize=address
 

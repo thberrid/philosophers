@@ -21,7 +21,6 @@
 # include <string.h>
 # include <stdio.h>
 # include <semaphore.h>
- #include <errno.h>
 
 # define P_ARG_MINLEN 	5
 # define P_ARG_MAXLEN 	6

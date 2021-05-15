@@ -32,6 +32,7 @@ C_NAME	= 	main.c 					\
 OBJ_NAME  = $(C_NAME:.c=.o)
 OBJ_DIR	  = obj
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(OBJ_NAME))
+FILES_H	  = philo_one.h
 
 CFLAGS	= -Wall -Wextra -Werror -g3 #-fsanitize=address
 

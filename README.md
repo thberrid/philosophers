@@ -1,7 +1,7 @@
 # philosophers
 
 - threads (of the same process) run in a shared memory space
-	... the execution of the smallest sequence of programmed instructions ..
+	... the execution of the smallest sequence of programmed instructions ...
 	... The thread has a program counter that keeps track of which instruc­tion to execute next. It has registers ...
 	... threads are the entities scheduled for execution on the CPU ...
 - processes run in separate memory spaces
@@ -94,5 +94,45 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 	return:
 		0 | error number
 
+---
 
+# semaphores
 
+`#include <semaphore.h>`
+
+```
+int sem_open(char *SEM_NAME, flags O_CREAT, access rights 0777, int value);
+int sem_post(sem_t *sem); // increment
+int sem_wait(sem_t *sem); // decrement, block if zero
+int sem_unlink(char *SEM_NAME);
+int sem_close(sem_t *sem);
+```
+
+----
+
+# process
+
+```
+kill
+exit
+```
+```
+#include <unistd.h>
+pid_t fork(void);
+```
+if fail : -1
+0 = parent
+< 0 new child process
+```
+#include <sys/types.h>
+#include <sys/wait.h>
+pid_t waitpid(pid_t pid, int *wstatus, int options);
+```
+pid  	< -1 	: any child process with gr ID = pid
+		-1		: any child process
+		0		: meaning wait for any child process whose process group ID is equal to that of the calling process
+		> 0		: wait forthe this child process
+
+options		WTERMSIG: returns the number of the signal that caused the child process to terminate
+			WSTOPSIG: returns the number of the signal which caused the child to stop.
+			...

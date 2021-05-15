@@ -46,6 +46,13 @@ static int	args_digitsonly(int ac, char **av)
 	return (0);
 }
 
+static int	args_forbiddenvalue(t_roomdata *roomdata)
+{
+	if (roomdata->philos_len > 200 || roomdata->philos_len < 2)
+		return (1);
+	return (0);
+}
+
 int			args_get(int ac, char **av, t_roomdata *roomdata)
 {
 	if (args_len(ac))
@@ -59,5 +66,7 @@ int			args_get(int ac, char **av, t_roomdata *roomdata)
 	roomdata->max_meals = -1;
 	if (ac > P_ARG_MINLEN)
 		roomdata->max_meals = ft_atoi(av[5]);
+	if (args_forbiddenvalue(roomdata))
+		return (1);
 	return (0);
 }
